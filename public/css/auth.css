@@ -1,0 +1,235 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4; /* Light Gray */
+    color: #2C3E50; /* Dark Gray */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Allow body to fill at least the viewport height */
+    flex-direction: column;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Form Container */
+.auth-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 400px; /* Keep fixed width */
+    text-align: center;
+    border: 2px solid #1A1F71; /* Dark Blue */
+    margin: 0 auto; /* Ensure it is centered horizontally */
+}
+
+/* Title */
+.auth-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1A1F71; /* Dark Blue */
+    margin-bottom: 20px;
+}
+
+/* Input Fields */
+.auth-form div {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.auth-form label {
+    font-weight: bold;
+    font-size: 14px;
+    display: block;
+    color: #1A1F71;
+    margin-bottom: 5px;
+}
+
+.auth-form input,
+.auth-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box; /* Ensure padding doesn’t affect width */
+}
+
+/* Buttons */
+.auth-button {
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #FFD700; /* Gold */
+    border: 2px solid #FFD700;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.auth-button:hover {
+    background-color: #FF0000; /* Electric Blue */
+    border: 2px solid #FF0000;
+}
+
+/* Checkbox & Links */
+.auth-links {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.auth-links a {
+    color: #1A1F71;
+    text-decoration: none;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+/* Smaller Remember Me Checkbox */
+.auth-remember {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.auth-remember label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.auth-remember input {
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+}
+
+/* Responsive Design for Register Form */
+@media (max-width: 768px) {
+    .auth-container {
+        width: 90%;  /* Allow container to scale down slightly */
+        padding: 20px;
+    }
+
+    .auth-button {
+        font-size: 14px;
+    }
+}
+
+/* Add padding for better space between input and button */
+.auth-form div {
+    padding-right: 10px;
+}
+
+/* Fixing issues for large screen sizes */
+@media (min-width: 769px) {
+    body {
+        height: auto; /* Allow auto-height for body on large screens */
+    }
+}
+
+/* Password Field Styling */
+.password-field {
+    position: relative;
+}
+
+#password {
+    width: 100%;
+    padding: 10px 40px 10px 10px; /* Add space for the eye icon on the right side */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box; /* Ensure padding doesn’t affect width */
+}
+
+/* Eye Icon inside the password field */
+#eye-icon {
+    position: absolute;
+    top: 70%; /* Center the icon vertically */
+    right: 20px; /* Adjust right position */
+    transform: translateY(-50%); /* Vertically center the icon */
+    font-size: 18px;
+    color: #000;
+    cursor: pointer;
+}
+
+#eye-icon:hover {
+    color: #007bff; /* Change color when hovering over the icon */
+}
+
+#password_confirmation {
+    padding-right: 30px; /* Add space for the eye icon */
+}
+
+#eye-icon-confirmation {
+    position: absolute;
+    top: 70%;
+    right: 20px;
+    transform: translateY(-50%); /* Vertically center the icon */
+    cursor: pointer;
+    font-size: 18px;
+    color: #000;
+}
+
+#eye-icon-confirmation:hover {
+    color: #007bff; /* Change icon color on hover */
+}
+
+/* Modal Styles for Error Messages */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 20% auto; /* Adjusted to make it vertically centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;  /* Adjusted width for smaller size */
+    min-width: 300px;  /* Ensure it doesn't get too small */
+    max-width: 500px;  /* Max width to prevent it from getting too wide */
+    text-align: center;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Button Style for OK */
+#closeErrorModal {
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#closeErrorModal:hover {
+    background-color: #da190b;
+}
+

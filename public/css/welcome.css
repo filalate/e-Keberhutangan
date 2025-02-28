@@ -1,0 +1,180 @@
+/* Gaya Umum */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    color: #2C3E50; /* Kelabu Gelap */
+    text-align: center;
+}
+
+/* Navbar dengan Warna JBPM */
+.navbar {
+    background: #002366; /* Biru Gelap */
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid #FF0000; /* Red border */
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo {
+    height: 45px; /* Logo lebih kecil */
+    margin-right: 10px;
+}
+
+.nav-text h1 {
+    font-size: 18px; /* Saiz dikurangkan */
+    font-weight: bold;
+    color: white;
+    margin: 0;
+}
+
+.nav-subtext {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.system-name {
+    font-size: 16px; /* Saiz lebih kecil */
+    font-weight: bold;
+    color: #FFD700; /* Kuning Emas */
+    text-transform: uppercase;
+    margin: 0 10px;
+}
+
+.blue-line {
+    width: 50px;
+    height: 4px;
+    background-color: white;
+}
+
+.nav-right {
+    display: flex;
+    gap: 15px;
+}
+
+/* Seksyen Hero */
+.hero {
+    background-color: #f4f4f4;
+    padding: 80px 20px;
+    border: 2px solid #002366; /* Red border */
+    max-width: 900px;
+    margin: 30px auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hero-content {
+    color: #002366; /* Biru Gelap */
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.hero-logo {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: 34px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 18px;
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+
+/* Seksyen About */
+.about {
+    background-color: white;
+    padding: 50px 20px;
+    border: 2px solid #002366; /* Biru Gelap */
+    max-width: 900px;
+    margin: 30px auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.about h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #002366; /* Biru Gelap */
+}
+
+.about p {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+/* Butang */
+.btn {
+    display: inline-block;
+    padding: 12px 22px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: 0.3s;
+    font-size: 16px;
+    border: 2px solid transparent;
+}
+
+.btn.primary {
+    background: #FFD700; /* Kuning Emas */
+    color: black;
+    border: 2px solid #FFD700;
+}
+
+.btn.primary:hover {
+    background: #FF0000; /* Biru Elektrik */
+    border: 2px solid #FF0000;
+    color: white;
+}
+
+.btn.secondary {
+    background: white;
+    color: #002366; /* Biru Gelap */
+    border: 2px solid #002366;
+}
+
+.btn.secondary:hover {
+    background: #002366; /* Biru Gelap */
+    color: white;
+    border: 2px solid white;
+}
+
+/* Red Button */
+.btn.red {
+    background: #FF0000; /* Red */
+    color: white;
+    border: 2px solid #FF0000;
+}
+
+.btn.red:hover {
+    background: #CC0000; /* Darker red */
+    border: 2px solid #CC0000;
+    color: white;
+}
+
+/* Footer */
+footer {
+    background: #002366; /* Biru Gelap */
+    color: white;
+    padding: 15px;
+    margin-top: 40px;
+    border-top: 4px solid #FF0000; /* Merah Gelap */
+}
+

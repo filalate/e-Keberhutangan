@@ -1,0 +1,487 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Center Titles */
+.form-title {
+    text-align: center; /* Centers the title */
+    color: #002147;
+    font-weight: bold;
+    font-size: 24px; /* Bold and slightly bigger font size */
+    margin-top: 20px;
+    margin-bottom: 20px; /* Space below the title */
+    border-bottom: 2px solid #002147; /* Adds a line under the title */
+    padding-bottom: 10px; /* Adds some space between the title and the line */
+}
+
+/* Main Container */
+.container {
+    width: 90% !important;
+    margin: 50px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h1, h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #002147;
+}
+
+h4 {
+    font-size: 18px;
+    color: #002147;
+    margin-top: 20px;
+}
+
+/* Success Message */
+.success-message {
+    background: #28a745;
+    color: white;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.text-center {
+    text-align: center;
+    width: 100%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+/* Form Styling */
+form {
+    margin-top: 15px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #444;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Form Grid Layout */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Label takes 1 part, input takes 2 parts */
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    transition: border 0.3s ease-in-out;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+}
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border: 2px solid black;
+}
+
+table th, table td {
+    border: 2px solid black;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #1E3A8A;
+    color: white;
+}
+
+/* Buttons */
+button, .btn {
+    display: inline-block;
+    width: auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Primary Button */
+.btn-primary, button {
+    background-color: #FF4500; /* Bright orange/red (representing fire) */
+    color: white;
+    border: 2px solid #FF4500; /* Match the button color for the border */
+}
+
+.btn-primary:hover, button:hover {
+    background-color: #FF6347; /* Lighter orange/red on hover */
+    border: 2px solid #FF6347; /* Match the hover color for the border */
+}
+
+/* Base button style */
+.btn-base {
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    box-sizing: border-box;
+    display: inline-block;
+    width: auto;
+    text-align: center;
+    line-height: normal;
+    text-decoration: none;
+}
+
+/* Secondary button (Kembali) */
+.btn-secondary {
+    @extend .btn-base;
+    background-color: #007bff;
+    color: #ffffff;
+    border: 1px solid #007bff;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(0, 123, 255, 0.56);
+    color: #ffffff;
+    border-color: rgba(0, 123, 255, 0.56);
+}
+
+/* Warning button (Kemaskini) */
+.btn-warning {
+    @extend .btn-base;
+    background-color: #ff7e00;
+    color: #ffffff;
+    border: 1px solid #ff7e00;
+}
+
+.btn-warning:hover {
+    background-color: rgba(255, 128, 0, 0.56);
+    color: #ffffff;
+    border-color: rgba(255, 128, 0, 0.56);
+}
+
+/* Ensure button and link elements behave the same */
+button.btn-base, a.btn-base {
+    display: inline-block;
+    vertical-align: middle;
+    text-decoration: none;
+    border: 1px solid transparent;
+    padding: 10px 20px;
+    font-size: 16px;
+    line-height: normal;
+    box-sizing: border-box;
+}
+
+/* Reset default button styles */
+button {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+/* Additional styling for button container */
+.button-container .btn {
+    min-width: 120px; /* Set a minimum width for both buttons */
+    margin: 5px; /* Add small margin if needed */
+}
+
+.button-container .btn-secondary:hover, .button-container .btn-warning:hover {
+    padding: 10px 20px; /* Ensure padding remains the same on hover */
+}
+
+/* Hantar Button */
+.btn-hantar, button {
+    background-color: #007bff; 
+    color: white;
+    border: 2px solid #007bff; 
+}
+
+.btn-hantar:hover, button:hover {
+    background-color: #339dff; 
+    border: 2px solid #339dff; 
+}
+
+/* Container for icon buttons */
+.icon-actions {
+    /*display: flex;*/
+    font-size: 16px; /* Saiz ikon */
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Styling for all icons */
+.icon-hover {
+    font-size: 18px;
+    color: #6c757d;
+    transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Hover effect for icons */
+.icon-hover:hover {
+    color: #007bff;
+    transform: scale(1.1);
+    border-color: #007bff;
+}
+
+/* Specific icon colors for different actions */
+.icon-hover .fa-eye {
+    color: #6c757d;
+}
+
+.icon-hover .fa-eye:hover {
+    color: #17a2b8;
+}
+
+.icon-hover .fa-pencil {
+    color: #6c757d;
+}
+
+.icon-hover .fa-pencil:hover {
+    color: #e0a800;
+}
+
+.icon-hover .fa-trash {
+    color: #dc3545;
+}
+
+.icon-hover .fa-trash:hover {
+    color: #c82333;
+}
+
+/* Styling for the delete form */
+.delete-form {
+    margin: 0; /* Remove any margin for the form */
+    padding: 0; /* Remove any padding */
+}
+
+/* Ensuring that the delete button inside the form follows the same style */
+.delete-form button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin: 0;  /* Ensure no additional margin on button */
+}
+
+/* Ensuring the button and icon are aligned */
+.delete-form button i {
+    font-size: 18px;
+}
+
+/* Optionally, add a hover effect for the delete button */
+.delete-form button:hover {
+    transform: scale(1.1);
+    color: #c82333;
+}
+
+/* Empty State */
+.empty-message {
+    margin-top: 20px;
+    color: #777;
+    font-size: 14px;
+}
+
+/* Button "Tambah Penyata Gaji" aligned to the right of the search bar */
+.d-flex {
+    display: flex;
+    justify-content: space-between; /* Space between search bar and button */
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.search-container {
+    flex-grow: 1;
+    position: relative; /* Add this line */
+}
+
+#search {
+    width: 70%;  /* Adjust the width of the search bar */
+    padding: 10px 30px 10px 40px; /* Add space on the right side for the icon */
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border 0.3s ease-in-out;
+}
+
+#search-icon {
+    position: absolute;
+    top: 45%;
+    right: 870px;
+    transform: translateY(-50%); /* Align the icon vertically */
+    color: #ccc;
+    pointer-events: none; /* Prevent the icon from blocking clicks on the input field */
+    z-index: 1; /* Ensures the icon is in front of the input field */
+}
+
+#search:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Button margin to the right of the search bar */
+.ml-3 {
+    margin-left: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .d-flex {
+        flex-direction: column; /* Stack search and button on smaller screens */
+        align-items: flex-start;
+    }
+
+    #search {
+        width: 100%; /* Make the search bar full width on small screens */
+    }
+
+    .ml-3 {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Section Titles */
+.section-title {
+    text-align: center;
+    color: #002147;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+/* Button styling */
+.btn-success {
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-success:hover {
+    background-color: #339dff;
+    border-color: #339dff;
+}
+
+/* Style the form fields */
+.form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 15px;
+    justify-content: space-between;
+}
+
+.form-group label {
+    margin-right: 10px;
+    font-weight: bold;
+    flex-shrink: 0;
+    width: 200px;
+}
+
+.form-group input {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 60%;
+}
+
+
+.dropdown-button {
+    background-color: white;
+    color: gray;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none !important; /* Pastikan tiada border */
+    border-bottom: 2px solid transparent !important; /* Border bawah transparent */
+    border-radius: 0 !important; /* Tiada border melengkung */
+    outline: none !important; /* Pastikan tiada outline */
+    box-shadow: none !important; /* Pastikan tiada shadow */
+    transition: all 0.3s ease-in-out;
+}
+
+.dropdown-button:hover {
+    background-color:rgba(248, 249, 250, 0);
+    color: #4a4a4a;
+    border-bottom: 2px solid #d1d5db  !important; /* Hanya border bawah berubah */
+    outline: none !important; /* Pastikan tiada outline semasa hover */
+    box-shadow: none !important; /* Pastikan tiada shadow semasa hover */
+}
+
+.dropdown-button:focus {
+    outline: none !important; /* Pastikan tiada outline semasa fokus */
+    box-shadow: none !important; /* Pastikan tiada shadow semasa fokus */
+}
+
+.dropdown-button.active {
+    border-bottom: 2px solid #3b82f6 !important; /* Border bawah warna biru bila aktif */
+}
