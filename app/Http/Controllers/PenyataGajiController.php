@@ -53,10 +53,16 @@ class PenyataGajiController extends Controller {
     }
 
     public function edit($id)
-{
-    $penyata = PenyataGaji::findOrFail($id);
-    return view('penyata_gaji.edit', compact('penyata'));
-}
+    {
+        $penyata = PenyataGaji::findOrFail($id);
+        return view('penyata_gaji.edit', compact('penyata'));
+    }
+
+    public function show($id)
+    {
+        $penyataGaji = PenyataGaji::findOrFail($id);
+        return view('penyata_gaji.show', compact('penyataGaji'));
+    }
 
     public function update(Request $request, $id) {
     $penyata = PenyataGaji::findOrFail($id); // Ambil data berdasarkan ID

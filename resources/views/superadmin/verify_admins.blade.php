@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <div class="container mx-auto mt-6">
-        <h1 class="text-xl font-bold text-gray-700">Senarai Penyelia Negeri yang Belum Disahkan</h1>
+        <h1 class="text-1xl font-bold text-center text-gray-700">Senarai Penyelia Negeri yang Belum Disahkan</h1>
 
         @if(session('success'))
             <div class="bg-green-500 text-white p-2 rounded mt-3">

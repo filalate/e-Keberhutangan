@@ -2,54 +2,77 @@
 
 @section('content')
 <div class="container">
-    <!-- Title at the top, centered and bold -->
-    <h2 class="form-title">Senarai Penyata Gaji</h2>
+    <h2 class="form-title text-center">Senarai Penyata Gaji</h2>
     
-    <!-- Search bar and Add button next to each other -->
-    <div class="d-flex">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="search-container">
             <input type="text" id="search" placeholder="Cari Nama Pegawai..." onkeyup="searchFunction()" />
-            <i class="fa fa-search" id="search-icon"></i> <!-- Search icon -->
+            <i class="fa fa-search" id="search-icon"></i>
         </div>
-        <a href="{{ route('penyata-gaji.create') }}" class="btn btn-primary ml-3">Tambah Penyata Gaji</a>
+        <a href="{{ route('penyata-gaji.create') }}" class="btn btn-primary">Tambah Penyata Gaji</a>
     </div>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <table class="table" id="penyataTable">
+    <table class="table table-bordered" id="penyataTable">
         <thead>
             <tr>
+                <th style="width: 50px;">Bil</th>
                 <th>Nama Pegawai</th>
-                <th>Pinjaman Peribadi + BSN</th>
-                <th>PTPTN</th>
-                <th>Koperasi</th>
-                <th>Zakat</th>
+                <th>Jumlah Hutang (RM)</th>
+                <th>Jumlah Bukan Hutang (RM)</th>
                 <th>Tindakan</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($penyata as $p)
+            @foreach($penyata as $index => $p)
                 <tr>
+                    <td>{{ $index + 1 }}</td>
                     <td>{{ $p->nama_pegawai }}</td>
-                    <td>RM{{ number_format($p->pinjaman_peribadi_bsn, 2) }}</td>
-                    <td>RM{{ number_format($p->ptptn, 2) }}</td>
-                    <td>RM{{ number_format($p->koperasi, 2) }}</td>
-                    <td>RM{{ number_format($p->zakat_yayasan_wakaf, 2) }}</td>
+
+                    {{-- Kira jumlah hutang --}}
+                    <td>
+                        RM{{ number_format(
+                            $p->pinjaman_peribadi_bsn +
+                            $p->pinjaman_perumahan +
+                            $p->bayaran_balik_itp +
+                            $p->bayaran_balik_bsh +
+                            $p->ptptn +
+                            $p->kutipan_semula_emolumen +
+                            $p->arahan_potongan_nafkah +
+                            $p->komputer +
+                            $p->pcb +
+                            $p->lain_lain_potongan_pembentungan +
+                            $p->koperasi +
+                            $p->berkat +
+                            $p->angkasa, 2) }}
+                    </td>
+
+                    {{-- Kira jumlah bukan hutang --}}
+                    <td>
+                        RM{{ number_format(
+                            $p->potongan_lembaga_th +
+                            $p->amanah_saham_nasional +
+                            $p->zakat_yayasan_wakaf +
+                            $p->insuran +
+                            $p->kwsp +
+                            $p->i_destinasi +
+                            $p->angkasa_bukan_pinjaman, 2) }}
+                    </td>
 
                     <td class="icon-actions">
-                        <!-- Butang dengan ikon -->
                         <a href="{{ route('penyata-gaji.show', $p->id) }}" class="icon-hover">
-                            <i class="fa fa-eye"></i> <!-- Mata untuk View -->
+                            <i class="fa fa-eye"></i>
                         </a>
                         <a href="{{ route('penyata-gaji.edit', $p->id) }}" class="icon-hover">
-                            <i class="fa fa-pencil"></i> <!-- Pensel untuk Edit -->
+                            <i class="fa fa-pencil"></i>
                         </a>
-                        <form action="{{ route('penyata-gaji.destroy', $p->id) }}" method="POST" class="delete-form">
+                        <form action="{{ route('penyata-gaji.destroy', $p->id) }}" method="POST" class="delete-form icon-hover">
                             @csrf @method('DELETE')
                             <button type="submit" class="icon-hover" onclick="return confirm('Anda pasti mahu padam?')">
-                                <i class="fa fa-trash"></i> <!-- Sampah untuk Padam -->
+                                <i class="fa fa-trash"></i>
                             </button>
                         </form>
                     </td>
@@ -68,9 +91,8 @@
         table = document.getElementById('penyataTable');
         tr = table.getElementsByTagName('tr');
 
-        // Loop through all table rows
         for (i = 1; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName('td')[0]; // First column (Nama Pegawai)
+            td = tr[i].getElementsByTagName('td')[1];
             if (td) {
                 txtValue = td.textContent || td.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {

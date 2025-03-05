@@ -100,23 +100,43 @@ input:focus, select:focus {
     border-color: #007bff;
     box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
 }
-/* Table Styles */
-table {
+
+.table {
     width: 100%;
+    table-layout: auto; /* Use auto for dynamic column width */
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Prevent content from overflowing */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for table */
     border-collapse: collapse;
-    margin-top: 10px;
-    border: 2px solid black;
+    font-family: Arial, sans-serif; /* Font yang lebih moden */
+
 }
 
-table th, table td {
-    border: 2px solid black;
-    padding: 12px;
-    text-align: left;
+.table th, .table td {
+    padding: 12px 15px; /* Larger padding for better spacing */
+    text-align: left; /* Center text alignment */
+    word-wrap: break-word; /* Ensure text wraps properly inside cells */
+    white-space: normal; /* Allow text to break into multiple lines if needed */
 }
 
-th {
-    background-color: #1E3A8A;
-    color: white;
+.table th {
+    background-color: #1E3A8A; /* Background color for header */
+    color: white; /* Text color for header */
+    font-weight: bold;
+    font-size: 16px; /* Saiz font untuk header */
+
+}
+
+.table td {
+    background-color: #f9f9f9; /* Light background for data cells */
+    border-bottom: 1px solid #ddd; /* Border to separate rows */
+    font-size: 14px; /* Saiz font untuk data */
+
+}
+
+td.icon-actions {
+    gap: 5px;
+    justify-content: center;
 }
 
 /* Buttons */
@@ -142,6 +162,7 @@ button, .btn {
     background-color: #FF4500; /* Bright orange/red (representing fire) */
     color: white;
     border: 2px solid #FF4500; /* Match the button color for the border */
+    margin-top: 20px; /* Add margin to create space between the title and the search bar */
 }
 
 .btn-primary:hover, button:hover {
@@ -169,7 +190,7 @@ button, .btn {
     @extend .btn-base;
     background-color: #007bff;
     color: #ffffff;
-    border: 1px solid #007bff;
+    border: 2px solid #007bff;
 }
 
 .btn-secondary:hover {
@@ -227,14 +248,14 @@ button {
 
 /* Hantar Button */
 .btn-hantar, button {
-    background-color: #007bff; 
+    background-color: #ff7e00; 
     color: white;
-    border: 2px solid #007bff; 
+    border: 2px solid #ff7e00; 
 }
 
 .btn-hantar:hover, button:hover {
-    background-color: #339dff; 
-    border: 2px solid #339dff; 
+    background-color: rgba(255, 128, 0, 0.56); 
+    border: 2px solid rgba(255, 128, 0, 0.56); 
 }
 
 /* Container for icon buttons */
@@ -286,7 +307,7 @@ button {
 }
 
 .icon-hover .fa-trash {
-    color: #dc3545;
+    color: #6c757d;
 }
 
 .icon-hover .fa-trash:hover {
@@ -297,6 +318,9 @@ button {
 .delete-form {
     margin: 0; /* Remove any margin for the form */
     padding: 0; /* Remove any padding */
+    display: inline-block;
+    border: 1px solid #ddd; 
+    border-radius: 4px;
 }
 
 /* Ensuring that the delete button inside the form follows the same style */
@@ -343,6 +367,7 @@ button {
 .search-container {
     flex-grow: 1;
     position: relative; /* Add this line */
+    margin-top: 20px; /* Add margin to create space between the title and the search bar */
 }
 
 #search {
@@ -357,11 +382,11 @@ button {
 #search-icon {
     position: absolute;
     top: 45%;
-    right: 870px;
-    transform: translateY(-50%); /* Align the icon vertically */
+    right: 96.5%; /* Adjust this percentage for a consistent position relative to the input */
+    transform: translateY(-50%);
     color: #ccc;
-    pointer-events: none; /* Prevent the icon from blocking clicks on the input field */
-    z-index: 1; /* Ensures the icon is in front of the input field */
+    pointer-events: none;
+    z-index: 1;
 }
 
 #search:focus {
@@ -406,23 +431,27 @@ button {
 }
 
 /* Section Titles */
+
 .section-title {
     text-align: center;
-    color: #002147;
+    background: #1E3A8A;
+    color: white;
     font-weight: bold;
     font-size: 16px;
+    padding: 8px;
+    border-radius: 5px;
     margin-top: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 15px; /* Tambah jarak bawah supaya tak terlalu rapat */
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 /* Button styling */
 .btn-success {
-    border: 2px solid #007bff;
-    border-radius: 5px;
-    padding: 10px 20px;
+    @extend .btn-base;
     background-color: #007bff;
+    border: 2px solid #007bff;
     color: white;
-    font-weight: bold;
 }
 
 .btn-success:hover {
@@ -484,4 +513,21 @@ button {
 
 .dropdown-button.active {
     border-bottom: 2px solid #3b82f6 !important; /* Border bawah warna biru bila aktif */
+}
+
+.info-box {
+    border: 1px solid #ccc; /* Warna border lebih lembut */
+    padding: 20px; /* Padding lebih besar */
+    border-radius: 8px; /* Border lebih smooth */
+    background: #f8f9fa; /* Warna latar yang neutral */
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1); /* Tambah shadow untuk efek "terangkat" */
+    font-size: 16px; /* Saiz font lebih mesra mata */
+    line-height: 1.6; /* Spacing antara teks lebih selesa */
+}
+
+.info-box p {
+    font-size: 15px; /* Readable font size */
+    color: #100; /* Dark gray for the paragraph text */
+    line-height: 1.8; /* Comfortable line height */
+    margin-bottom: 10px; /* Space after paragraphs */
 }

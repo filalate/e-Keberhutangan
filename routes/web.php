@@ -90,11 +90,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 // Route for SKAI07 form
-Route::get('/borang/skai07', function () {
-    return view('borang.skai07');
-})->name('skai07.create');
-
-Route::post('/skai07/store', [SKAI07Controller::class, 'store'])->name('skai07.store');
+Route::resource('borang', Skai07Controller::class);
 
 Route::middleware(['auth', 'role:superadmin,admin_negeri'])->group(function () {
     Route::resource('penyata-gaji', PenyataGajiController::class);

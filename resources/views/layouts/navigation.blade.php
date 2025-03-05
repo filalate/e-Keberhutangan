@@ -16,8 +16,8 @@
                     </x-nav-link>
 
                     <!-- Borang Dropdown -->
-                    @if(auth()->user()->role == 'superadmin' || auth()->user()->role == 'admin_negeri')
-                        <x-dropdown align="right" width="48">
+                    @if(auth()->check() && (auth()->user()->role == 'superadmin' || auth()->user()->role == 'admin_negeri'))
+                    <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 dropdown-button">
                                     <div>Borang</div>
@@ -34,15 +34,15 @@
                                     {{ __('Borang Penyata Gaji') }}
                                 </x-dropdown-link>
                                 
-                                <x-dropdown-link :href="route('skai07.create')" class="nav-link-grey">
+                                <x-dropdown-link :href="route('borang.index')" class="nav-link-grey">
                                     {{ __('Borang SKAI 07') }}
                                 </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
                     @endif
 
-                    @if(auth()->user()->role == 'superadmin')
-                        <x-nav-link :href="url('/verify-admins')" :active="request()->routeIs('verify.admins')" class="nav-link-hover {{ request()->routeIs('verify.admins') ? 'nav-link-active' : '' }}">
+                    @if(auth()->check() && auth()->user()->role == 'superadmin')
+                    <x-nav-link :href="url('/verify-admins')" :active="request()->routeIs('verify.admins')" class="nav-link-hover {{ request()->routeIs('verify.admins') ? 'nav-link-active' : '' }}">
                             {{ __('Sahkan Penyelia Negeri') }}
                         </x-nav-link>
                     @endif
@@ -101,7 +101,7 @@
             </x-responsive-nav-link>
 
             @if(auth()->user()->role == 'superadmin' || auth()->user()->role == 'admin_negeri')
-                <x-responsive-nav-link :href="route('skai07.create')" class="nav-link-grey">
+                <x-responsive-nav-link :href="route('borang.index')" class="nav-link-grey">
                     {{ __('Borang SKAI 07') }}
                 </x-responsive-nav-link>
 
