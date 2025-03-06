@@ -71,17 +71,23 @@
         table = document.getElementById('skai07Table');
         tr = table.getElementsByTagName('tr');
 
+        // Loop through all rows (skipping the header row)
         for (i = 1; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName('td')[1];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
+            tr[i].style.display = "none";  // Initially hide the row
+            td = tr[i].getElementsByTagName('td');
+
+            // Loop through each cell in the row (for all columns)
+            for (var j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";  // Show row if match is found
+                        break;  // No need to check other cells once a match is found
+                    }
                 }
             }
         }
     }
 </script>
+
 @endsection

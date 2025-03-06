@@ -41,7 +41,7 @@
         @foreach($hutang_fields as $name => $label)
             <div class="form-grid">
                 <label>{{ $label }}:</label>
-                <input type="number" name="{{ $name }}" class="form-control" value="{{ $penyata->$name }}" step="0.001">
+                <input type="number" name="{{ $name }}" class="form-control hutang" value="{{ $penyata->$name }}" step="0.001">
             </div>
         @endforeach
 
@@ -60,37 +60,60 @@
         @foreach($bukan_hutang_fields as $name => $label)
             <div class="form-grid">
                 <label>{{ $label }}:</label>
-                <input type="number" name="{{ $name }}" class="form-control" value="{{ $penyata->$name }}" step="0.001">
+                <input type="number" name="{{ $name }}" class="form-control bukan-hutang" value="{{ $penyata->$name }}" step="0.001">
             </div>
         @endforeach
 
-
         <hr>
-            <div class="button-container">
+
+        <!-- Ringkasan Kewangan -->
+        <h4 class="section-title">Ringkasan Kewangan</h4>
+        <div class="form-grid">
+            <label>Jumlah Hutang:</label>
+            <input type="number" id="jumlah_hutang" name="jumlah_hutang" class="form-control" readonly>
+        </div>
+        <div class="form-grid">
+            <label>Jumlah Bukan Hutang:</label>
+            <input type="number" id="jumlah_bukan_hutang" name="jumlah_bukan_hutang" class="form-control" readonly>
+        </div>
+        <div class="form-grid">
+            <label>Jumlah Keseluruhan:</label>
+            <input type="number" id="jumlah_keseluruhan" name="jumlah_keseluruhan" class="form-control" readonly>
+        </div>
+
+        <div class="button-container">
             <a href="{{ route('penyata-gaji.index') }}" class="btn btn-secondary btn-base mt-3">Kembali</a>
             <button type="submit" class="btn btn-warning btn-base mt-3">Kemaskini</button>
-            </div>
+        </div>
     </form>
 
     <script>
         function updateCalculations() {
+            // Kira jumlah hutang
             let totalHutang = 0;
             document.querySelectorAll('.hutang').forEach(input => {
                 totalHutang += parseFloat(input.value) || 0;
             });
-            document.getElementById('jumlah_hutang').value = totalHutang;
+            document.getElementById('jumlah_hutang').value = totalHutang.toFixed(2);
 
+            // Kira jumlah bukan hutang
             let totalBukanHutang = 0;
             document.querySelectorAll('.bukan-hutang').forEach(input => {
                 totalBukanHutang += parseFloat(input.value) || 0;
             });
-            document.getElementById('jumlah_bukan_hutang').value = totalBukanHutang;
+            document.getElementById('jumlah_bukan_hutang').value = totalBukanHutang.toFixed(2);
+
+            // Kira jumlah keseluruhan
+            let totalKeseluruhan = totalHutang + totalBukanHutang;
+            document.getElementById('jumlah_keseluruhan').value = totalKeseluruhan.toFixed(2);
         }
 
+        // Attach event listeners to all hutang and bukan-hutang fields
         document.querySelectorAll('.hutang, .bukan-hutang').forEach(input => {
             input.addEventListener('input', updateCalculations);
         });
 
+        // Call updateCalculations on page load to set initial values
         updateCalculations();
     </script>
 </div>

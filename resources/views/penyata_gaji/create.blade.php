@@ -5,7 +5,7 @@
     <!-- Centered Title -->
     <h2 class="form-title">Borang Penyata Gaji</h2>
 
-    <form action="{{ route('penyata-gaji.store') }}" method="POST">
+    <form action="{{ route('penyata-gaji.store') }}" method="POST" id="penyataGajiForm">
         @csrf
 
         <h4 class="section-title">Maklumat Pegawai</h4>
@@ -104,11 +104,68 @@
             <input type="number" id="angkasa_bukan_pinjaman" name="angkasa_bukan_pinjaman" class="form-control" step="0.001">
         </div>
         
-        <div class="button-container">
-            <a href="{{ route('penyata-gaji.index') }}" class="btn btn-secondary btn-base mt-3">Kembali</a>
-            <button type="submit" class="btn btn-success btn-base mt-3">Simpan</button>
+        <!-- Financial Summary -->
+        <h4 class="section-title">Ringkasan Kewangan</h4>
+        <div class="form-grid">
+            <label>Jumlah Hutang:</label>
+            <input type="number" id="jumlah_hutang" name="jumlah_hutang" class="form-control" readonly>
+        </div>
+        <div class="form-grid">
+            <label>Jumlah Bukan Hutang:</label>
+            <input type="number" id="jumlah_bukan_hutang" name="jumlah_bukan_hutang" class="form-control" readonly>
+        </div>
+        <div class="form-grid">
+            <label>Jumlah Keseluruhan:</label>
+            <input type="number" id="jumlah_keseluruhan" name="jumlah_keseluruhan" class="form-control" readonly>
         </div>
 
+        <div class="button-container">
+            <a href="{{ route('penyata-gaji.index') }}" class="btn btn-secondary btn-base mt-3">Kembali</a>
+            <button type="submit" class="btn btn-hantar btn-base mt-3">Simpan</button>
+        </div>
     </form>
+
+    <script>
+        function calculateTotal() {
+            // Calculate total hutang (liabilities)
+            let hutangFields = [
+                'pinjaman_peribadi_bsn', 'pinjaman_perumahan', 'bayaran_itp',
+                'bayaran_bsh', 'ptptn', 'kutipan_semula_emolumen', 'arahan_potongan_nafkah',
+                'komputer', 'pcb', 'lain_lain_potongan', 'koperasi', 'berkat', 'angkasa_hutang'
+            ];
+
+            let totalHutang = 0;
+            hutangFields.forEach(function(id) {
+                totalHutang += parseFloat(document.getElementById(id).value) || 0;
+            });
+            document.getElementById('jumlah_hutang').value = totalHutang.toFixed(2);
+
+            // Calculate total bukan hutang (non-liabilities)
+            let bukanHutangFields = [
+                'potongan_lembaga_th', 'amanah_saham_nasional', 'zakat_yapiem', 'insuran', 
+                'kwsp', 'i_destinasi', 'angkasa_bukan_pinjaman'
+            ];
+
+            let totalBukanHutang = 0;
+            bukanHutangFields.forEach(function(id) {
+                totalBukanHutang += parseFloat(document.getElementById(id).value) || 0;
+            });
+            document.getElementById('jumlah_bukan_hutang').value = totalBukanHutang.toFixed(2);
+
+            // Calculate total keseluruhan (total)
+            let totalKeseluruhan = totalHutang + totalBukanHutang;
+            document.getElementById('jumlah_keseluruhan').value = totalKeseluruhan.toFixed(2);
+        }
+
+        // Attach event listeners to all input fields
+        document.querySelectorAll('#penyataGajiForm input[type="number"]').forEach(function(input) {
+            input.addEventListener('input', calculateTotal);
+        });
+
+        // Call calculateTotal when the form is submitted to ensure values are updated
+        document.getElementById("penyataGajiForm").onsubmit = function() {
+            calculateTotal();
+        };
+    </script>
 </div>
 @endsection

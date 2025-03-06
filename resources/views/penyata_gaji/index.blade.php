@@ -23,6 +23,7 @@
                 <th>Nama Pegawai</th>
                 <th>Jumlah Hutang (RM)</th>
                 <th>Jumlah Bukan Hutang (RM)</th>
+                <th>Jumlah Keseluruhan (RM)</th>
                 <th>Tindakan</th>
             </tr>
         </thead>
@@ -31,37 +32,10 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $p->nama_pegawai }}</td>
-
-                    {{-- Kira jumlah hutang --}}
-                    <td>
-                        RM{{ number_format(
-                            $p->pinjaman_peribadi_bsn +
-                            $p->pinjaman_perumahan +
-                            $p->bayaran_balik_itp +
-                            $p->bayaran_balik_bsh +
-                            $p->ptptn +
-                            $p->kutipan_semula_emolumen +
-                            $p->arahan_potongan_nafkah +
-                            $p->komputer +
-                            $p->pcb +
-                            $p->lain_lain_potongan_pembentungan +
-                            $p->koperasi +
-                            $p->berkat +
-                            $p->angkasa, 2) }}
-                    </td>
-
-                    {{-- Kira jumlah bukan hutang --}}
-                    <td>
-                        RM{{ number_format(
-                            $p->potongan_lembaga_th +
-                            $p->amanah_saham_nasional +
-                            $p->zakat_yayasan_wakaf +
-                            $p->insuran +
-                            $p->kwsp +
-                            $p->i_destinasi +
-                            $p->angkasa_bukan_pinjaman, 2) }}
-                    </td>
-
+                    <td>RM{{ number_format($p->jumlah_hutang, 2) }}</td>
+                    <td>RM{{ number_format($p->jumlah_bukan_hutang, 2) }}</td>
+                    <td>RM{{ number_format($p->jumlah_keseluruhan, 2) }}</td>
+                    
                     <td class="icon-actions">
                         <a href="{{ route('penyata-gaji.show', $p->id) }}" class="icon-hover">
                             <i class="fa fa-eye"></i>

@@ -30,6 +30,9 @@ class PenyataGaji extends Model {
         'insuran', 
         'kwsp', 
         'i_destinasi',
-        'angkasa_bukan_pinjaman'
+        'angkasa_bukan_pinjaman',
+        'jumlah_hutang',
+        'jumlah_bukan_hutang',
+        'jumlah_keseluruhan',
     ];
 }
