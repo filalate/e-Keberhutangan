@@ -7,7 +7,9 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\SKAI07Controller;
+use App\Http\Controllers\PinjamanPerumahanController;
 use App\Http\Controllers\PenyataGajiController;
+use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
 use App\Models\SKAI07;
 
@@ -39,12 +41,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-// Update Password Route
-Route::middleware('auth')->group(function () {
-    Route::put('/password', [App\Http\Controllers\Auth\PasswordController::class, 'update'])
-        ->name('password.update');
+    // Update Password Route
+    Route::put('/password', [App\Http\Controllers\Auth\PasswordController::class, 'update'])->name('password.update');
 });
 
 // Hanya Superadmin boleh mengakses halaman ini
@@ -92,9 +91,43 @@ Route::middleware('auth')->post('logout', [AuthenticatedSessionController::class
 // Route for SKAI07 form
 Route::resource('borang', Skai07Controller::class);
 
-Route::middleware(['auth', 'role:superadmin,admin_negeri'])->group(function () {
-    Route::resource('penyata-gaji', PenyataGajiController::class);
+// Route for Pinjaman Perumahan
+Route::resource('pinjaman-perumahan', PinjamanPerumahanController::class);
+
+// Get Pegawai Details for Pinjaman Perumahan
+Route::get('/get-pegawai-details', function (Request $request) {
+    $namaPegawai = $request->input('nama_pegawai');
+    
+    $pegawai = \App\Models\PinjamanPerumahan::where('nama_pegawai', $namaPegawai)->first();
+
+    if ($pegawai) {
+        return response()->json([
+            'no_ic' => $pegawai->no_ic,
+            'jawatan' => $pegawai->jawatan,
+            'gred' => $pegawai->gred,
+        ]);
+    } else {
+        return response()->json(['error' => 'Data not found'], 404);
+    }
 });
+
+// Middleware for SuperAdmin and Admin Negeri (Penyata Gaji and Pinjaman Perumahan)
+Route::middleware(['auth', 'role:superadmin,admin_negeri'])->group(function () {
+    // Penyata Gaji Routes
+    Route::resource('penyata-gaji', PenyataGajiController::class);
+    Route::get('/penyata-gaji/search', [PenyataGajiController::class, 'search'])->name('penyata-gaji.search');
+
+    // Pinjaman Perumahan Routes
+    Route::resource('pinjaman-perumahan', PinjamanPerumahanController::class);
+    Route::get('/pinjaman-perumahan/search', [PinjamanPerumahanController::class, 'search'])->name('pinjaman-perumahan.search');
+});
+
+// Route for SuperAdmin to view and manage Negeri
+Route::get('/negeri/{negeri}', [SuperAdminController::class, 'paparNegeri'])->name('negeri.show');
+
+// Direct Route for Penyata Gaji and Pinjaman Perumahan Index
+Route::get('/penyata-gaji', [PenyataGajiController::class, 'index'])->name('penyata-gaji.index');
+Route::get('/pinjaman-perumahan', [PinjamanPerumahanController::class, 'index'])->name('pinjaman-perumahan.index');
 
 // Import auth routes
 require __DIR__.'/auth.php';

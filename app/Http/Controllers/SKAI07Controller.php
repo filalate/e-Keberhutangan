@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SKAI07;
+use App\Models\PinjamanPerumahan;
 
 class SKAI07Controller extends Controller
 {
@@ -18,7 +19,10 @@ class SKAI07Controller extends Controller
 
     public function create()
     {
-        return view('borang.create');
+        // Fetch the list of employees from PinjamanPerumahan table
+        $pinjaman = PinjamanPerumahan::select('nama_pegawai')->distinct()->get();
+
+        return view('borang.create', compact('pinjaman'));
     }
 
     public function store(Request $request)

@@ -48,4 +48,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isSuperAdmin()
+    {
+        return $this->role === 'superadmin'; // Pastikan superadmin ada dalam DB
+    }
+
+    public function penyataGaji()
+    {
+        return $this->hasMany(PenyataGaji::class, 'user_id');
+    }
+
+
 }

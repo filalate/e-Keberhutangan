@@ -33,6 +33,10 @@
                                 <x-dropdown-link :href="route('penyata-gaji.index')" class="nav-link-grey">
                                     {{ __('Borang Penyata Gaji') }}
                                 </x-dropdown-link>
+
+                                <x-dropdown-link :href="route('pinjaman-perumahan.index')" class="nav-link-grey">
+                                    {{ __('Borang Pinjaman Perumahan') }}
+                                </x-dropdown-link>
                                 
                                 <x-dropdown-link :href="route('borang.index')" class="nav-link-grey">
                                     {{ __('Borang SKAI 07') }}
@@ -41,11 +45,37 @@
                         </x-dropdown>
                     @endif
 
+                    @if(auth()->user()->isSuperAdmin())
+                    <x-dropdown align="right" width="48">
+    <x-slot name="trigger">
+        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 dropdown-button">
+            <div>Negeri</div>
+            <div class="ms-1">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </div>
+        </button>
+    </x-slot>
+
+    <x-slot name="content">
+        <div class="max-h-48 overflow-y-auto"> <!-- Scrollable content -->
+            @foreach(['IBU PEJABAT','JOHOR','KEDAH','KELANTAN','MELAKA','NEGERI SEMBILAN','PAHANG','PERAK','PERLIS','SELANGOR','TERENGGANU','SARAWAK','WILAYAH PERSEKUTUAN KUALA LUMPUR','WILAYAH PERSEKUTUAN LABUAN','WILAYAH PERSEKUTUAN PUTRAJAYA','FRAM WILAYAH UTARA','FRAM WILAYAH TIMUR','FRAM SABAH','FRAM SARAWAK'] as $negeri)
+                <x-dropdown-link :href="route('negeri.show', $negeri)" class="nav-link-grey">
+                    {{ $negeri }}
+                </x-dropdown-link>
+            @endforeach
+        </div>
+    </x-slot>
+</x-dropdown>
+                    @endif
+
                     @if(auth()->check() && auth()->user()->role == 'superadmin')
                     <x-nav-link :href="url('/verify-admins')" :active="request()->routeIs('verify.admins')" class="nav-link-hover {{ request()->routeIs('verify.admins') ? 'nav-link-active' : '' }}">
                             {{ __('Sahkan Penyelia Negeri') }}
                         </x-nav-link>
                     @endif
+
                 </div>
             </div>
 
@@ -101,12 +131,16 @@
             </x-responsive-nav-link>
 
             @if(auth()->user()->role == 'superadmin' || auth()->user()->role == 'admin_negeri')
-                <x-responsive-nav-link :href="route('borang.index')" class="nav-link-grey">
-                    {{ __('Borang SKAI 07') }}
-                </x-responsive-nav-link>
-
                 <x-responsive-nav-link :href="route('penyata-gaji.index')" class="nav-link-grey">
                     {{ __('Penyata Gaji') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('pinjaman-perumahan.index')" class="nav-link-grey">
+                    {{ __('Pinjaman Perumahan') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('borang.index')" class="nav-link-grey">
+                    {{ __('Borang SKAI 07') }}
                 </x-responsive-nav-link>
             @endif
 
@@ -141,15 +175,15 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.querySelectorAll('.dropdown-button').forEach(button => {
-    button.addEventListener('click', function() {
-        // Buang kelas active dari semua butang
-        document.querySelectorAll('.dropdown-button').forEach(btn => btn.classList.remove('active'));
-        // Tambah kelas active pada butang yang diklik
-        this.classList.add('active');
-    });
-});
-</script>
 </nav>
+
+<script>
+        document.querySelectorAll('.dropdown-button').forEach(button => {
+        button.addEventListener('click', function() {
+            // Buang kelas active dari semua butang
+            document.querySelectorAll('.dropdown-button').forEach(btn => btn.classList.remove('active'));
+            // Tambah kelas active pada butang yang diklik
+            this.classList.add('active');
+        });
+    });
+</script>

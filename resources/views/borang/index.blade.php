@@ -16,6 +16,7 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
+    <div class="table-responsive">
     <table class="table table-bordered" id="skai07Table">
         <thead>
             <tr>
@@ -57,6 +58,8 @@
             @endforeach
         </tbody>
     </table>
+</div>
+
     <!-- Pagination Links -->
     <div class="pagination">
         {{ $skai07->links() }}

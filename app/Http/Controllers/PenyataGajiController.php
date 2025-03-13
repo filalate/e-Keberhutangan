@@ -12,11 +12,27 @@ class PenyataGajiController extends Controller {
         // No need to use middleware() here directly
     }
 
-    public function index() {
-        $penyata = PenyataGaji::paginate(10);
-        return view('penyata_gaji.index', compact('penyata'));  // Correct view path
-    }    
+    public function index(Request $request)
+    {
 
+        if (auth()->user()->isSuperAdmin() && $request->has('negeri') && $request->negeri !== '') {
+            // Superadmin memilih negeri tertentu
+            $penyata_gaji = PenyataGaji::whereHas('user', function ($query) use ($request) {
+                $query->where('negeri', $request->negeri);
+            })->paginate(10);
+        } elseif (auth()->user()->isSuperAdmin()) {
+            // Superadmin boleh lihat semua data
+            $penyata_gaji = PenyataGaji::paginate(10);
+        } else {
+            // Admin negeri hanya boleh lihat negeri sendiri
+            $penyata_gaji = PenyataGaji::whereHas('user', function ($query) {
+                $query->where('negeri', auth()->user()->negeri);
+            })->paginate(10);
+        }
+
+        return view('penyata_gaji.index', compact('penyata_gaji'));
+    }
+    
     public function create() {
         return view('penyata_gaji.create');
     }
@@ -74,8 +90,9 @@ class PenyataGajiController extends Controller {
     
         // Kira jumlah keseluruhan
         $validatedData['jumlah_keseluruhan'] = 
-            $validatedData['jumlah_hutang'] + $validatedData['jumlah_bukan_hutang'];
-    
+        $validatedData['jumlah_hutang'] + $validatedData['jumlah_bukan_hutang'];
+        $validatedData['user_id'] = auth()->id(); 
+
         // Simpan data ke dalam database
         PenyataGaji::create($validatedData);
     
@@ -96,6 +113,7 @@ class PenyataGajiController extends Controller {
 
     public function update(Request $request, $id) {
         $penyata = PenyataGaji::findOrFail($id);
+        $penyata->user_id = auth()->id(); // Pastikan admin negeri hanya update data sendiri
     
         $validatedData = $request->validate([
             'nama_pegawai' => 'required|string|max:255',
@@ -161,5 +179,20 @@ class PenyataGajiController extends Controller {
     public function destroy(PenyataGaji $penyata) {
         $penyata->delete();
         return redirect()->route('penyata-gaji.index')->with('success', 'Penyata Gaji berjaya dipadam');
+    }
+
+    public function search(Request $request)
+    {
+        $namaPegawai = $request->query('nama_pegawai');
+        $penyataGaji = PenyataGaji::where('nama_pegawai', $namaPegawai)->first();
+
+        if ($penyataGaji) {
+            return response()->json([
+                'jumlah_keseluruhan' => $penyataGaji->jumlah_keseluruhan,
+                'pinjaman_perumahan' => $penyataGaji->pinjaman_perumahan,
+            ]);
+        } else {
+            return response()->json(null);
+        }
     }
 }

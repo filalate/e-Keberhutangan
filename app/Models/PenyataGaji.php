@@ -5,11 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PenyataGaji extends Model {
+class PenyataGaji extends Model
+{
     use HasFactory;
 
+    // Define the table associated with the model
     protected $table = 'penyata_gaji';
+
+    // Define the fillable fields
     protected $fillable = [
+        'user_id', // Ensure user_id is included for relationships
         'nama_pegawai',
         'pinjaman_peribadi_bsn',
         'pinjaman_perumahan', 
@@ -33,6 +38,13 @@ class PenyataGaji extends Model {
         'angkasa_bukan_pinjaman',
         'jumlah_hutang',
         'jumlah_bukan_hutang',
-        'jumlah_keseluruhan',
+        'jumlah_keseluruhan'
     ];
+
+    // Define the relationship to the User model
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+
+    }
 }

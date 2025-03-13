@@ -20,12 +20,14 @@ body {
 
 /* Main Container */
 .container {
+    max-width: 1200px; /* Had maksimum lebar */
     width: 90% !important;
     margin: 50px auto;
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* Supaya kandungan dalam container tidak pecah */
 }
 
 /* Headings */
@@ -109,8 +111,18 @@ input:focus, select:focus {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for table */
     border-collapse: collapse;
     font-family: Arial, sans-serif; /* Font yang lebih moden */
+    min-width: 800px; /* Pastikan jadual tidak mengecil terlalu banyak */
+    border-collapse: collapse;
 
 }
+
+.table-responsive {
+    max-width: 100%; /* Pastikan ia tidak melebihi container */
+    overflow-x: auto; /* Jika jadual terlalu lebar, scroll secara horizontal */
+    display: block; /* Pastikan ia berfungsi dengan baik dalam flexbox atau grid */
+    white-space: nowrap; /* Pastikan kandungan dalam satu baris */
+}
+
 
 .table th, .table td {
     padding: 12px 15px; /* Larger padding for better spacing */
@@ -368,10 +380,13 @@ button {
     flex-grow: 1;
     position: relative; /* Add this line */
     margin-top: 20px; /* Add margin to create space between the title and the search bar */
+    max-width: 600px; /* Had maksimum untuk search bar */
+    min-width: 250px; /* Pastikan tidak terlalu kecil */
+    overflow-x: auto; /* Jika perlu, akan ada scroll */
 }
 
 #search {
-    width: 70%;  /* Adjust the width of the search bar */
+    width: 100%;  /* Adjust the width of the search bar */
     padding: 10px 30px 10px 40px; /* Add space on the right side for the icon */
     font-size: 14px;
     border: 1px solid #ccc;
@@ -382,7 +397,7 @@ button {
 #search-icon {
     position: absolute;
     top: 45%;
-    right: 96.5%; /* Adjust this percentage for a consistent position relative to the input */
+    left: 15px; /* Jarak dari kiri */
     transform: translateY(-50%);
     color: #ccc;
     pointer-events: none;
@@ -412,6 +427,10 @@ button {
         align-items: flex-start;
     }
 
+    .search-container {
+        width: 100%; /* Supaya memenuhi skrin kecil */
+    }
+
     #search {
         width: 100%; /* Make the search bar full width on small screens */
     }
@@ -419,6 +438,14 @@ button {
     .ml-3 {
         margin-left: 0;
         margin-top: 10px;
+    }
+
+    .table-responsive {
+        overflow-x: auto; /* Pastikan jadual boleh scroll kiri kanan */
+    }
+
+    .table th, .table td {
+        font-size: 14px; /* Saiz lebih kecil supaya muat dalam skrin */
     }
 }
 
