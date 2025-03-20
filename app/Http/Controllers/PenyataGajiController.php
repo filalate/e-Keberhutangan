@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use App\Models\PenyataGaji;
@@ -176,23 +177,40 @@ class PenyataGajiController extends Controller {
         return redirect()->route('penyata-gaji.index')->with('success', 'Penyata Gaji berjaya dikemaskini');
     }
 
-    public function destroy(PenyataGaji $penyata) {
+    public function destroy($id)
+    {
+        $penyata = PenyataGaji::find($id);
+        if (!$penyata) {
+            return redirect()->route('penyata-gaji.index')->with('error', 'Data tidak wujud!');
+        }
+    
+        // Delete the PenyataGaji
         $penyata->delete();
+    
+        // Redirect back with success message
         return redirect()->route('penyata-gaji.index')->with('success', 'Penyata Gaji berjaya dipadam');
     }
 
     public function search(Request $request)
     {
-        $namaPegawai = $request->query('nama_pegawai');
-        $penyataGaji = PenyataGaji::where('nama_pegawai', $namaPegawai)->first();
+        // Get the pegawai's name (nama_pegawai) from the query string
+        $id_pegawai = $request->query('id_pegawai');
 
+        // Find the Penyata Gaji based on the nama_pegawai directly from the PenyataGaji table
+        $penyataGaji = PenyataGaji::where('id', $id_pegawai)->first();
+
+        // Check if Penyata Gaji exists and return the data
         if ($penyataGaji) {
             return response()->json([
+                'nama_pegawai' => $penyataGaji->nama_pegawai,  // Fetch nama_pegawai directly from PenyataGaji table
                 'jumlah_keseluruhan' => $penyataGaji->jumlah_keseluruhan,
                 'pinjaman_perumahan' => $penyataGaji->pinjaman_perumahan,
             ]);
         } else {
-            return response()->json(null);
+            // If Penyata Gaji not found, return null
+            return response()->json(null);  
         }
     }
+
+
 }

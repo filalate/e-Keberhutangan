@@ -115,11 +115,7 @@ Route::get('/get-pegawai-details', function (Request $request) {
 Route::middleware(['auth', 'role:superadmin,admin_negeri'])->group(function () {
     // Penyata Gaji Routes
     Route::resource('penyata-gaji', PenyataGajiController::class);
-    Route::get('/penyata-gaji/search', [PenyataGajiController::class, 'search'])->name('penyata-gaji.search');
-
-    // Pinjaman Perumahan Routes
-    Route::resource('pinjaman-perumahan', PinjamanPerumahanController::class);
-    Route::get('/pinjaman-perumahan/search', [PinjamanPerumahanController::class, 'search'])->name('pinjaman-perumahan.search');
+    Route::get('/penyata-gaji/api/search', [PenyataGajiController::class, 'search'])->name('penyata-gaji.search');
 });
 
 // Route for SuperAdmin to view and manage Negeri
@@ -127,7 +123,7 @@ Route::get('/negeri/{negeri}', [SuperAdminController::class, 'paparNegeri'])->na
 
 // Direct Route for Penyata Gaji and Pinjaman Perumahan Index
 Route::get('/penyata-gaji', [PenyataGajiController::class, 'index'])->name('penyata-gaji.index');
-Route::get('/pinjaman-perumahan', [PinjamanPerumahanController::class, 'index'])->name('pinjaman-perumahan.index');
+// Route::get('/pinjaman-perumahan', [PinjamanPerumahanController::class, 'index'])->name('pinjaman-perumahan.index');
 
 // Import auth routes
 require __DIR__.'/auth.php';

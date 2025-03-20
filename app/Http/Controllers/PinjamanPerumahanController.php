@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PinjamanPerumahan;
-use App\Models\PenyataGaji; // Untuk tarik data dari Penyataan Gaji
+use App\Models\PenyataGaji;
 use App\Models\User; // Import model User
 use Illuminate\Http\Request;
 
@@ -29,51 +29,71 @@ class PinjamanPerumahanController extends Controller
     public function create(Request $request)
     {
         // Admin hanya boleh lihat pegawai dalam negeri mereka
-        if(auth()->user()->role == 'admin_negeri') {
-            $namaPegawaiList = User::where('negeri', auth()->user()->negeri)->get();
-        } else {
-            // Untuk superadmin atau lain-lain, boleh lihat semua pegawai
-            $namaPegawaiList = User::all();
-        }
+        // if(auth()->user()->role == 'admin_negeri') {
+        //     // Get users only from the same 'negeri' as the logged-in admin
+        //     $namaPegawaiList = User::where('negeri', auth()->user()->negeri)->get();
+        // } else {
+        //     // For superadmin or other roles, get all users
+        //     // You can add a condition here if needed (e.g., excluding deleted users)
+        //     $namaPegawaiList = User::all();
+        // }
+
+        $namaPegawaiList = PenyataGaji::all();
 
         return view('pinjaman_perumahan.create', compact('namaPegawaiList'));
-    }
+    }    
     
 
     public function store(Request $request)
-    {
-        // Ambil data dari penyata_gaji berdasarkan nama_pegawai
-        $penyataGaji = PenyataGaji::where('nama_pegawai', $request->nama_pegawai)->first();
+{
+    // Validate the input data
+    $validated = $request->validate([
+        'nama_pegawai' => 'required|exists:pegawai,id',  // Ensure 'nama_pegawai' exists in the 'pegawai' table
+        'no_ic' => 'required|string|max:20',  // Validate 'no_ic' as a string with a max length
+        'jawatan' => 'required|string|max:255',  // Validate 'jawatan' as a string with a max length
+        'gred' => 'required|string|max:50',  // Validate 'gred' as a string with a max length
+        'tempat_bertugas' => 'required|string|max:255',  // Validate 'tempat_bertugas' as a string with a max length
+        'jumlah_pendapatan' => 'required|numeric|min:0',  // Validate 'jumlah_pendapatan' as numeric and not negative
+    ]);
 
-        if ($penyataGaji) {
-            $pinjaman = new PinjamanPerumahan();
-            $pinjaman->nama_pegawai = $request->nama_pegawai;
-            $pinjaman->no_ic = $request->no_ic;
-            $pinjaman->jawatan = $request->jawatan;
-            $pinjaman->gred = $request->gred;
-            $pinjaman->tempat_bertugas = $request->tempat_bertugas;
-            $pinjaman->jumlah_pendapatan = $request->jumlah_pendapatan;
-            
-            // Ambil jumlah potongan dari penyata_gaji
-            $pinjaman->jumlah_potongan = $penyataGaji->jumlah_keseluruhan;
+    // Ambil data dari penyata_gaji berdasarkan nama_pegawai
+    $penyataGaji = PenyataGaji::where('nama_pegawai', $request->nama_pegawai)->first();
 
-            // Kirakan Agregat Keterhutangan (Jumlah Potongan / Jumlah Pendapatan) * 100
-            $pinjaman->agregat_keterhutangan = ($pinjaman->jumlah_potongan / $pinjaman->jumlah_pendapatan) * 100;
+    if ($penyataGaji) {
+        // Create a new Pinjaman Perumahan instance
+        $pinjaman = new PinjamanPerumahan();
+        $pinjaman->nama_pegawai = $request->nama_pegawai;
+        $pinjaman->no_ic = $request->no_ic;
+        $pinjaman->jawatan = $request->jawatan;
+        $pinjaman->gred = $request->gred;
+        $pinjaman->tempat_bertugas = $request->tempat_bertugas;
+        $pinjaman->jumlah_pendapatan = $request->jumlah_pendapatan;
+        
+        // Ambil jumlah potongan dari penyata_gaji
+        $pinjaman->jumlah_potongan = $penyataGaji->jumlah_keseluruhan;
 
-            // Ambil jumlah pinjaman perumahan dari penyata_gaji
-            $pinjaman->jumlah_pinjaman_perumahan = $penyataGaji->pinjaman_perumahan;
+        // Kirakan Agregat Keterhutangan (Jumlah Potongan / Jumlah Pendapatan) * 100
+        $pinjaman->agregat_keterhutangan = ($pinjaman->jumlah_potongan / $pinjaman->jumlah_pendapatan) * 100;
 
-            // Kirakan Agregat Bersih ((Jumlah Potongan - Pinjaman Perumahan) / Jumlah Pendapatan) * 100
-            $pinjaman->agregat_bersih = (($pinjaman->jumlah_potongan - $pinjaman->jumlah_pinjaman_perumahan) / $pinjaman->jumlah_pendapatan) * 100;
+        // Ambil jumlah pinjaman perumahan dari penyata_gaji
+        $pinjaman->jumlah_pinjaman_perumahan = $penyataGaji->pinjaman_perumahan;
 
-            $pinjaman->user_id = auth()->id();  // Assign the user_id to the current logged-in user
-            $pinjaman->save();
+        // Kirakan Agregat Bersih ((Jumlah Potongan - Pinjaman Perumahan) / Jumlah Pendapatan) * 100
+        $pinjaman->agregat_bersih = (($pinjaman->jumlah_potongan - $pinjaman->jumlah_pinjaman_perumahan) / $pinjaman->jumlah_pendapatan) * 100;
 
-            return redirect()->route('pinjaman-perumahan.index')->with('success', 'Borang Pinjaman Perumahan Berjaya Ditambah');
-        } else {
-            return redirect()->back()->with('error', 'Data Penyata Gaji tidak ditemukan.');
-        }
+        // Assign the user_id to the currently logged-in user
+        $pinjaman->user_id = auth()->id();
+
+        // Save the Pinjaman Perumahan record
+        $pinjaman->save();
+
+        // Redirect back with a success message
+        return redirect()->route('pinjaman-perumahan.index')->with('success', 'Borang Pinjaman Perumahan Berjaya Ditambah');
+    } else {
+        // If no penyata_gaji data is found, redirect back with an error message
+        return redirect()->back()->with('error', 'Data Penyata Gaji tidak ditemukan.');
     }
+}
 
     public function edit($id)
     {
@@ -133,6 +153,6 @@ class PinjamanPerumahanController extends Controller
         }
     
         $pinjaman->delete();
-        return redirect()->route('pinjaman-perumahan.index')->with('success', 'Borang Pinjaman Perumahan Berjaya Dihapuskan');
+        return redirect()->route('pinjaman-perumahan.index')->with('success', 'Borang Pinjaman Perumahan Berjaya Dipadam');
     }
 }

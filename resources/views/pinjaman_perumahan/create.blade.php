@@ -68,28 +68,27 @@
 
 <script>
     function fetchPenyataGaji() {
-        const namaPegawai = document.getElementById('nama_pegawai').value;
+    const idPegawai = document.getElementById('nama_pegawai').value;
 
-        if (namaPegawai) {
-            fetch(`/penyata-gaji/search?nama_pegawai=${namaPegawai}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Data received:", data); // Debugging
-                    if (data) {
-                        document.getElementById('jumlah_potongan').value = parseFloat(data.jumlah_keseluruhan || 0).toFixed(2);
-                        document.getElementById('jumlah_pinjaman_perumahan').value = parseFloat(data.pinjaman_perumahan || 0).toFixed(2);
+    if (idPegawai) {
+        fetch(`/penyata-gaji/api/search?id_pegawai=${idPegawai}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    document.getElementById('jumlah_potongan').value = parseFloat(data.jumlah_keseluruhan || 0).toFixed(2);
+                    document.getElementById('jumlah_pinjaman_perumahan').value = parseFloat(data.pinjaman_perumahan || 0).toFixed(2);
 
-                        // Panggil calculateAgregat() untuk mengira agregat
-                        calculateAgregat();
-                    } else {
-                        alert('Data Penyata Gaji tidak ditemukan.');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        } else {
-            alert('Sila pilih nama pegawai.');
-        }
+                    // Call calculateAgregat() for further calculations
+                    calculateAgregat();
+                } else {
+                    alert('Data Penyata Gaji tidak ditemukan.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    } else {
+        alert('Sila pilih nama pegawai.');
     }
+}
 
     function calculateAgregat() {
         console.log("calculateAgregat dipanggil"); // Debugging

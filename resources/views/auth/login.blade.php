@@ -16,6 +16,22 @@
             </div>
         @endif
 
+        <!-- Notyf Success Notification (if available in session) -->
+        @if (session('success'))
+            <script>
+                // Create a new Notyf instance
+                const notyf = new Notyf({
+                    duration: 3000,  // Show for 3 seconds
+                    ripple: true,    // Apply ripple effect
+                    position: { x: 'right', y: 'top' },  // Set position to top-right
+                    dismissible: true // Make the notification dismissible
+                });
+                
+                // Display the success message from session
+                notyf.success("{{ session('success') }}");
+            </script>
+        @endif
+
         <form method="POST" action="{{ route('login') }}" class="auth-form">
             @csrf
 
@@ -48,8 +64,6 @@
             <div class="auth-links">
                 <p>Belum ada akaun? <a href="{{ route('register') }}">Daftar</a></p>
             </div>
-
-            
         </form>
     </div>
 
@@ -58,42 +72,42 @@
         function togglePassword() {
             var passwordField = document.getElementById("password");
             var eyeIcon = document.getElementById("eye-icon");
-            
+
             if (passwordField.type === "password") {
-                passwordField.type = "text";  // Change to text type to show password
+                passwordField.type = "text";  // Show password
                 eyeIcon.classList.remove("fa-eye");
                 eyeIcon.classList.add("fa-eye-slash");  // Change icon to slash
             } else {
-                passwordField.type = "password";  // Change back to password type to hide
+                passwordField.type = "password";  // Hide password
                 eyeIcon.classList.remove("fa-eye-slash");
                 eyeIcon.classList.add("fa-eye");  // Change icon back to eye
             }
         }
 
-         // Handling the error modal
-         const errorModal = document.getElementById("errorModal");
-        const closeErrorBtn = document.getElementById("closeErrorModal");
-        const closeErrorIcon = document.getElementsByClassName("close")[0];
-
-        // Show the error modal
+        // Handling the error modal
+        const errorModal = document.getElementById("errorModal");
         if (errorModal) {
+            const closeErrorBtn = document.getElementById("closeErrorModal");
+            const closeErrorIcon = document.getElementsByClassName("close")[0];
+
+            // Show the error modal if there are errors
             errorModal.style.display = "block";
-        }
 
-        // Close the modal and redirect to login
-        closeErrorBtn.onclick = function() {
-            errorModal.style.display = "none";
-        }
-
-        // Close the modal when the user clicks the close button (X)
-        closeErrorIcon.onclick = function() {
-            errorModal.style.display = "none";
-        }
-
-        // Close the modal if the user clicks outside the modal content
-        window.onclick = function(event) {
-            if (event.target == errorModal) {
+            // Close the modal when the user clicks the "OK" button
+            closeErrorBtn.onclick = function() {
                 errorModal.style.display = "none";
+            }
+
+            // Close the modal when the user clicks the close button (X)
+            closeErrorIcon.onclick = function() {
+                errorModal.style.display = "none";
+            }
+
+            // Close the modal if the user clicks outside the modal content
+            window.onclick = function(event) {
+                if (event.target == errorModal) {
+                    errorModal.style.display = "none";
+                }
             }
         }
     </script>
