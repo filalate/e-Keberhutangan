@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Auth\Events\Verified;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminVerificationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -11,12 +12,18 @@ use App\Http\Controllers\PinjamanPerumahanController;
 use App\Http\Controllers\PenyataGajiController;
 use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Models\SKAI07;
+use App\Models\PinjamanPerumahan;
+
 
 // Halaman utama
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Dashboard Route with Email Verification
+Route::middleware(['auth', 'verified'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Dashboard: Hantar pengguna ke dashboard masing-masing berdasarkan peranan
 Route::middleware(['auth'])->group(function () {
@@ -55,6 +62,7 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::get('/verify-admins', [AdminVerificationController::class, 'index'])->name('verify.admins');
     Route::post('/verify-admin/{id}', [AdminVerificationController::class, 'verify'])->name('verify.admin');
 });
+
 
 // Hanya Admin Negeri boleh mengakses halaman ini
 Route::middleware(['auth', 'role:admin_negeri'])->group(function () {
@@ -95,20 +103,11 @@ Route::resource('borang', Skai07Controller::class);
 Route::resource('pinjaman-perumahan', PinjamanPerumahanController::class);
 
 // Get Pegawai Details for Pinjaman Perumahan
-Route::get('/get-pegawai-details', function (Request $request) {
-    $namaPegawai = $request->input('nama_pegawai');
-    
-    $pegawai = \App\Models\PinjamanPerumahan::where('nama_pegawai', $namaPegawai)->first();
+Route::get('/pegawai/{id}', [Skai07Controller::class, 'getPegawaiInfo']);
 
-    if ($pegawai) {
-        return response()->json([
-            'no_ic' => $pegawai->no_ic,
-            'jawatan' => $pegawai->jawatan,
-            'gred' => $pegawai->gred,
-        ]);
-    } else {
-        return response()->json(['error' => 'Data not found'], 404);
-    }
+Route::get('/pegawai/{id}', function ($id) {
+    $pegawai = PinjamanPerumahan::find($id);
+    return response()->json($pegawai);
 });
 
 // Middleware for SuperAdmin and Admin Negeri (Penyata Gaji and Pinjaman Perumahan)
@@ -122,11 +121,12 @@ Route::middleware(['auth', 'role:superadmin,admin_negeri'])->group(function () {
 Route::get('/negeri/{negeri}', [SuperAdminController::class, 'paparNegeri'])->name('negeri.show');
 
 // Direct Route for Penyata Gaji and Pinjaman Perumahan Index
-Route::get('/penyata-gaji', [PenyataGajiController::class, 'index'])->name('penyata-gaji.index');
+// Route::get('/penyata-gaji', [PenyataGajiController::class, 'index'])->name('penyata-gaji.index');
 // Route::get('/pinjaman-perumahan', [PinjamanPerumahanController::class, 'index'])->name('pinjaman-perumahan.index');
 
 // Import auth routes
 require __DIR__.'/auth.php';
+
 
 // Home Route
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

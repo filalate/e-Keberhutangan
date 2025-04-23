@@ -48,7 +48,7 @@ class PinjamanPerumahanController extends Controller
 {
     // Validate the input data
     $validated = $request->validate([
-        'nama_pegawai' => 'required|exists:pegawai,id',  // Ensure 'nama_pegawai' exists in the 'pegawai' table
+        'nama_pegawai' => 'required|exists:penyata_gaji,nama_pegawai',  // Ensure 'nama_pegawai' exists in the 'pegawai' table
         'no_ic' => 'required|string|max:20',  // Validate 'no_ic' as a string with a max length
         'jawatan' => 'required|string|max:255',  // Validate 'jawatan' as a string with a max length
         'gred' => 'required|string|max:50',  // Validate 'gred' as a string with a max length

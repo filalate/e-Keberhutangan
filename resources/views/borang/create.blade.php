@@ -11,19 +11,24 @@
         <h4 class="section-title">Maklumat Pegawai</h4>
         <div class="form-grid">
             <label for="nama">Nama Pegawai:</label>
-            <input type="text" id="nama" name="nama">
+            <select id="nama" name="nama" class="form-control"required>
+                <option value="">Pilih Nama Pegawai</option>
+                @foreach ($pinjaman as $id => $nama)
+                    <option value="{{ $id }}">{{ $nama }}</option>
+                @endforeach
+            </select>
 
             <label for="no_kad_pengenalan">No Kad Pengenalan:</label>
-            <input type="text" id="no_kad_pengenalan" name="no_kad_pengenalan" required>
+            <input type="text" id="no_kad_pengenalan" name="no_kad_pengenalan" required readonly>
 
             <label for="no_badan">No Badan:</label>
             <input type="text" id="no_badan" name="no_badan" required>
 
             <label for="gred">Gred:</label>
-            <input type="text" id="gred" name="gred" required>
+            <input type="text" id="gred" name="gred" required readonly>
 
             <label for="jawatan">Jawatan:</label>
-            <input type="text" id="jawatan" name="jawatan" required>
+            <input type="text" id="jawatan" name="jawatan" required readonly>
         </div>
 
         <hr>
@@ -187,6 +192,37 @@ document.querySelectorAll('input').forEach(function(input) {
 
 // Call calculateTotals once to set initial values
 calculateTotals();
+
+document.getElementById('nama').addEventListener('change', function() {
+    var pegawaiId = this.value;
+    
+    if (pegawaiId) {
+        fetch('/pegawai/' + pegawaiId)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data); // Untuk debug
+                document.getElementById('no_kad_pengenalan').value = data.no_ic || '';
+                document.getElementById('jawatan').value = data.jawatan || '';
+                document.getElementById('gred').value = data.gred || '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Kosongkan field jika ada error
+                document.getElementById('no_kad_pengenalan').value = '';
+                document.getElementById('jawatan').value = '';
+                document.getElementById('gred').value = '';
+            });
+    } else {
+        document.getElementById('no_kad_pengenalan').value = '';
+        document.getElementById('jawatan').value = '';
+        document.getElementById('gred').value = '';
+    }
+});
 
 </script>
 

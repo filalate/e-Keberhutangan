@@ -38,26 +38,30 @@ class RegisteredUserController extends Controller
             'role' => ['required', 'string', 'in:pegawai,admin_negeri'], // Superadmin tidak boleh dipilih
         ]);
 
-        // Create the user with 'verified' set to false initially for 'admin_negeri'
+        // Create the user with 'verified' set to true (no Superadmin verification)
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'negeri' => $request->negeri,
             'role' => $request->role,
-            'verified' => $request->role === 'admin_negeri' ? false : true, // Set unverified for admin_negeri
+            'verified' => true, // Set directly to true, no need for verification step
         ]);
 
-        // Trigger the Registered event and log in the user, but only if the user is not 'admin_negeri'
-        if ($user->role !== 'admin_negeri') {
-            event(new Registered($user));
-            Auth::login($user);
-        }
+        // Trigger the Registered event and log in the user
+        event(new Registered($user));
+        Auth::login($user);
 
-        // Optionally, store success message and redirect to login
-        session()->flash('success', 'Pendaftaran berjaya. Sila tunggu pengesahan daripada Superadmin.');
+        // Send the verification email (optional, if you want to ensure email verification)
+        $user->sendEmailVerificationNotification();
+
+        // Store success message and redirect to login
+        // session()->flash('success', 'Pendaftaran berjaya. Sila log masuk.');
 
         // Redirect to login page
-        return redirect()->route('login');
+        // return redirect()->route('login');
+
+        return redirect()->route('verification.notice')
+                 ->with('status', 'verification-link-sent');
     }
 }

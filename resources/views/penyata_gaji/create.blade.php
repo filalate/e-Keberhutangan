@@ -67,8 +67,8 @@
             <input type="number" id="berkat" name="berkat" class="form-control" step="0.001">
         </div>
         <div class="form-grid">
-            <label for="angkasa_hutang">Angkasa (Hutang):</label>
-            <input type="number" id="angkasa_hutang" name="angkasa_hutang" class="form-control" step="0.001">
+            <label for="angkasa">Angkasa (Hutang):</label>
+            <input type="number" id="angkasa" name="angkasa" class="form-control" step="0.001">
         </div>
 
         <hr>
@@ -84,8 +84,8 @@
             <input type="number" id="amanah_saham_nasional" name="amanah_saham_nasional" class="form-control" step="0.001">
         </div>
         <div class="form-grid">
-            <label for="zakat_yapiem">Zakat / Yapiem / Yayasan Wakaf:</label>
-            <input type="number" id="zakat_yapiem" name="zakat_yapiem" class="form-control" step="0.001">
+            <label for="zakat_yayasan_wakaf">Zakat / Yapiem / Yayasan Wakaf:</label>
+            <input type="number" id="zakat_yayasan_wakaf" name="zakat_yayasan_wakaf" class="form-control" step="0.001">
         </div>
         <div class="form-grid">
             <label for="insuran">Insuran:</label>

@@ -9,19 +9,21 @@ use App\Models\PinjamanPerumahan;
 class SKAI07Controller extends Controller
 {
     public function index()
-{
-    // Paginate the results (10 per page as an example)
-    $skai07 = SKAI07::paginate(10);
+    {
+        // Paginate the results (10 per page as an example)
+        $skai07 = SKAI07::paginate(10);
 
-    // Pass paginated results to the view
-    return view('borang.index', compact('skai07'));
-}
+        // Pass paginated results to the view
+        return view('borang.index', compact('skai07'));
+    }
 
     public function create()
     {
-        // Fetch the list of employees from PinjamanPerumahan table
-        $pinjaman = PinjamanPerumahan::select('nama_pegawai')->distinct()->get();
+        // Ambil senarai pegawai yang agregat_bersih > 60%
+        $pinjaman = PinjamanPerumahan::where('agregat_bersih', '>', 60)
+                                    ->pluck('nama_pegawai', 'id'); // Hanya pegawai dengan agregat_bersih > 60%
 
+                                    
         return view('borang.create', compact('pinjaman'));
     }
 
@@ -91,7 +93,6 @@ class SKAI07Controller extends Controller
         return view('borang.edit', compact('skai07'));
     }
 
-
     public function update(Request $request, $id) 
     {
         $skai07 = SKAI07::findOrFail($id);
@@ -150,6 +151,21 @@ class SKAI07Controller extends Controller
         return redirect()->route('borang.index')->with('success', 'Maklumat berjaya dikemaskini!');
     }
 
+    public function getPegawaiDetails($id)
+    {
+        $pegawai = PinjamanPerumahan::find($id);  // Assuming PinjamanPerumahan model has the required data
+
+        if ($pegawai) {
+            return response()->json([
+                'no_kad_pengenalan' => $pegawai->no_ic,
+                'jawatan' => $pegawai->jawatan,
+                'gred' => $pegawai->gred,
+            ]);
+        } else {
+            return response()->json(['error' => 'Pegawai not found'], 404);
+        }
+    }
+
     public function destroy($id)
     {
         $skai07 = SKAI07::findOrFail($id); // Cari record berdasarkan ID
@@ -157,6 +173,4 @@ class SKAI07Controller extends Controller
 
         return redirect()->route('borang.index')->with('success', 'Maklumat berjaya dipadam!');
     }
-    
-
 }

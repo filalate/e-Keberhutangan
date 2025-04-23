@@ -3,6 +3,18 @@
 @section('content')
 <div class="container">
     <h2 class="form-title">Borang Pinjaman Perumahan</h2>
+
+    @if ($errors->any())
+        <div class="alert alert-danger" style="color:red">
+            <strong>There were some problems with your input:</strong>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('pinjaman-perumahan.store') }}" method="POST">
         @csrf
 
@@ -12,7 +24,7 @@
             <select id="nama_pegawai" name="nama_pegawai" class="form-control" required onchange="fetchPenyataGaji()">
                 <option value="">Pilih Nama Pegawai</option>
                 @foreach($namaPegawaiList as $pegawai)
-                    <option value="{{ $pegawai->id }}">{{ $pegawai->nama_pegawai }}</option>
+                    <option value="{{ $pegawai->nama_pegawai }}" data-id="{{ $pegawai->id }}">{{ $pegawai->nama_pegawai }}</option>
                 @endforeach
             </select>
 
@@ -68,7 +80,10 @@
 
 <script>
     function fetchPenyataGaji() {
-    const idPegawai = document.getElementById('nama_pegawai').value;
+
+    const selectNP = document.getElementById('nama_pegawai');
+    const selectedOptionNP = selectNP.options[selectNP.selectedIndex];
+    const idPegawai = selectedOptionNP.getAttribute('data-id');
 
     if (idPegawai) {
         fetch(`/penyata-gaji/api/search?id_pegawai=${idPegawai}`)
