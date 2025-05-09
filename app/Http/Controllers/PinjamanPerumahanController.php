@@ -11,20 +11,49 @@ class PinjamanPerumahanController extends Controller
 {
     public function index(Request $request)
     {
-        if (auth()->user()->isSuperAdmin() && $request->has('negeri')) {
-            // Superadmin boleh pilih negeri
-            $pinjaman_perumahan = PinjamanPerumahan::whereHas('user', function ($query) use ($request) {
+        // Ambil tahun dan bulan dari request, dengan default semasa
+        $year = $request->input('year', date('Y'));  // Default tahun semasa
+        $month = $request->input('month', null);  // Default bulan adalah null
+    
+        // Mulakan query untuk mendapatkan data
+        $pinjaman_perumahan = PinjamanPerumahan::query();
+    
+        // Periksa jika superadmin dan ada filter negeri
+        if (auth()->user()->isSuperAdmin() && $request->has('negeri') && $request->negeri !== '') {
+            // Superadmin memilih negeri tertentu
+            $pinjaman_perumahan->whereHas('user', function ($query) use ($request) {
                 $query->where('negeri', $request->negeri);
-            })->paginate(10);
+            });
+        } elseif (auth()->user()->isSuperAdmin()) {
+            // Jika superadmin tidak memilih negeri, hanya data superadmin sahaja dipaparkan
+            $pinjaman_perumahan->where('user_id', auth()->id()); // Filter berdasarkan user_id superadmin
         } else {
-            // Admin Negeri hanya boleh lihat data negeri sendiri
-            $pinjaman_perumahan = PinjamanPerumahan::whereHas('user', function ($query) {
+            // Admin negeri hanya boleh lihat negeri sendiri
+            $pinjaman_perumahan->whereHas('user', function ($query) {
                 $query->where('negeri', auth()->user()->negeri);
-            })->paginate(10);
+            });
         }
-
-        return view('pinjaman_perumahan.index', compact('pinjaman_perumahan'));
+    
+        // Condition untuk tahun dan bulan
+        if ($month && $year) {
+            // Jika kedua-dua tahun dan bulan dipilih
+            $pinjaman_perumahan->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month);
+        } elseif ($year) {
+            // Jika hanya tahun dipilih
+            $pinjaman_perumahan->whereYear('created_at', $year);
+        } elseif ($month) {
+            // Jika hanya bulan dipilih, tanpa tahun
+            $pinjaman_perumahan->whereMonth('created_at', $month);
+        }
+    
+        // Ambil data dan paginate
+        $pinjaman_perumahan = $pinjaman_perumahan->paginate(10);
+    
+        // Return view dengan data yang difilter
+        return view('pinjaman_perumahan.index', compact('pinjaman_perumahan', 'year', 'month'));
     }
+
 
     public function create(Request $request)
     {
@@ -38,7 +67,9 @@ class PinjamanPerumahanController extends Controller
         //     $namaPegawaiList = User::all();
         // }
 
-        $namaPegawaiList = PenyataGaji::all();
+        // $namaPegawaiList = PenyataGaji::all();
+        $user_id = auth()->id();
+        $namaPegawaiList = PenyataGaji::where('user_id', $user_id)->get();
 
         return view('pinjaman_perumahan.create', compact('namaPegawaiList'));
     }    

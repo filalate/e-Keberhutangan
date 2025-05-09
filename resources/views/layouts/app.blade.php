@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <link rel="icon" type="image/png" href="{{ asset('images/logo_bomba.png') }}">
-        <title>{{ config('app.name', 'e-Keberhutangan') }}</title>
+        <title>{{ config('app.name', 'e-Liabiliti') }}</title>
 
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 

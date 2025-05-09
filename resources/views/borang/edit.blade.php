@@ -112,7 +112,11 @@
             <input type="number" id="lebihan_pendapatan" readonly value="{{ old('lebihan_pendapatan', ($skai07->gaji + $skai07->elaun + $skai07->sewa_rumah + $skai07->sewa_kenderaan + $skai07->sumbangan_suami_isteri + $skai07->lain_lain_pendapatan) - ($skai07->pinjaman_peribadi + $skai07->kad_kredit + $skai07->lain2_tidak_bercagar)) }}">
 
             <label>% Liabiliti Tidak Bercagar:</label>
-            <input type="text" id="percent_liabiliti_tidak_bercagar" readonly value="{{ old('percent_liabiliti_tidak_bercagar', number_format((($skai07->pinjaman_peribadi + $skai07->kad_kredit + $skai07->lain2_tidak_bercagar) / ($skai07->gaji + $skai07->elaun + $skai07->sewa_rumah + $skai07->sewa_kenderaan + $skai07->sumbangan_suami_isteri + $skai07->lain_lain_pendapatan)) * 100, 2)) }}%">
+            <input type="text" id="percent_liabiliti_tidak_bercagar" readonly value="{{ old('percent_liabiliti_tidak_bercagar', 
+            number_format(
+                ($skai07->gaji + $skai07->elaun + $skai07->sewa_rumah + $skai07->sewa_kenderaan + $skai07->sumbangan_suami_isteri + $skai07->lain_lain_pendapatan) != 0 ? 
+                (($skai07->pinjaman_peribadi + $skai07->kad_kredit + $skai07->lain2_tidak_bercagar) / ($skai07->gaji + $skai07->elaun + $skai07->sewa_rumah + $skai07->sewa_kenderaan + $skai07->sumbangan_suami_isteri + $skai07->lain_lain_pendapatan)) * 100 : 0, 2)) }}%
+
         </div>
 
         <!-- Form Buttons -->

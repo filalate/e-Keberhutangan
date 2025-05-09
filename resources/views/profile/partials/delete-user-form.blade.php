@@ -1,6 +1,3 @@
-@extends('layouts.app')
-
-@section('content')
 <section class="space-y-6">
     <header>
         <h2 class="text-lg font-medium text-gray-900">
@@ -21,12 +18,11 @@
     </button>
 
     <!-- Modal Pengesahan -->
-    <div 
-        x-data="{ open: true }"
-
-        x-transition 
-        x-on:keydown.window.escape="open = false"
-        class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+    <div x-data="{ showModal: false }" x-show="showModal" 
+         x-on:open-modal.window="showModal = $event.detail === 'confirm-user-deletion'"
+         x-on:keydown.escape.window="showModal = false"
+         x-transition
+         class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50" style="display: none;">
         
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
             <h2 class="text-lg font-medium text-gray-900">
@@ -61,7 +57,7 @@
                 <div class="mt-6 flex justify-end">
                     <button 
                         type="button"
-                        x-on:click="open = false"
+                        x-on:click="showModal = false"
                         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
                         {{ __('Batal') }}
                     </button>
@@ -76,4 +72,3 @@
         </div>
     </div>
 </section>
-@endsection

@@ -38,7 +38,13 @@ class SKAI07 extends Model
         'jumlah_pendapatan',
         'jumlah_perbelanjaan',
         'lebihan_pendapatan',
-        'percent_liabiliti_tidak_bercagar'
+        'percent_liabiliti_tidak_bercagar',
+        'user_id'
     ];    
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
 

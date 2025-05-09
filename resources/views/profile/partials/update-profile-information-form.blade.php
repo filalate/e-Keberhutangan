@@ -1,6 +1,4 @@
-@extends('layouts.app')
 
-@section('content')
 <div class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
     <header>
         <h2 class="text-lg font-medium text-gray-900">
@@ -84,4 +82,4 @@
         </div>
     </form>
 </div>
-@endsection
+

@@ -15,24 +15,49 @@ class PenyataGajiController extends Controller {
 
     public function index(Request $request)
     {
+        // Ambil tahun dan bulan dari request, dengan default semasa
+        $year = $request->input('year', date('Y'));  // Default tahun semasa
+        $month = $request->input('month', null);  // Default bulan adalah null
 
+        // Mulakan query untuk mendapatkan data
+        $penyata_gaji = PenyataGaji::query();
+
+        // Jika superadmin memilih negeri, maka akan muncul data negeri yang ditapis
         if (auth()->user()->isSuperAdmin() && $request->has('negeri') && $request->negeri !== '') {
             // Superadmin memilih negeri tertentu
-            $penyata_gaji = PenyataGaji::whereHas('user', function ($query) use ($request) {
-                $query->where('negeri', $request->negeri);
-            })->paginate(10);
+            $penyata_gaji->whereHas('user', function ($query) use ($request) {
+                $query->where('negeri', $request->negeri);  // Filter berdasarkan negeri
+            });
         } elseif (auth()->user()->isSuperAdmin()) {
-            // Superadmin boleh lihat semua data
-            $penyata_gaji = PenyataGaji::paginate(10);
+            // Jika superadmin tidak memilih negeri, hanya data superadmin sahaja dipaparkan
+            $penyata_gaji->where('user_id', auth()->id()); // Filter berdasarkan user_id superadmin
         } else {
-            // Admin negeri hanya boleh lihat negeri sendiri
-            $penyata_gaji = PenyataGaji::whereHas('user', function ($query) {
-                $query->where('negeri', auth()->user()->negeri);
-            })->paginate(10);
+            // Admin negeri hanya boleh lihat negeri mereka sendiri
+            $penyata_gaji->whereHas('user', function ($query) {
+                $query->where('negeri', auth()->user()->negeri);  // Filter berdasarkan negeri yang login
+            });
         }
 
-        return view('penyata_gaji.index', compact('penyata_gaji'));
+        // Condition untuk tahun dan bulan
+        if ($month && $year) {
+            // Jika kedua-dua tahun dan bulan dipilih
+            $penyata_gaji->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month);
+        } elseif ($year) {
+            // Jika hanya tahun dipilih
+            $penyata_gaji->whereYear('created_at', $year);
+        } elseif ($month) {
+            // Jika hanya bulan dipilih, tanpa tahun
+            $penyata_gaji->whereMonth('created_at', $month);
+        }
+
+        // Ambil data dan paginate
+        $penyata_gaji = $penyata_gaji->paginate(10);
+
+        // Return view dengan data yang difilter
+        return view('penyata_gaji.index', compact('penyata_gaji', 'year', 'month'));
     }
+
     
     public function create() {
         return view('penyata_gaji.create');
@@ -93,6 +118,7 @@ class PenyataGajiController extends Controller {
         $validatedData['jumlah_keseluruhan'] = 
         $validatedData['jumlah_hutang'] + $validatedData['jumlah_bukan_hutang'];
         $validatedData['user_id'] = auth()->id(); 
+        // $validatedData['tarikh'] = now(); // Ensure we store the current date and time
 
         // Simpan data ke dalam database
         PenyataGaji::create($validatedData);
@@ -171,7 +197,9 @@ class PenyataGajiController extends Controller {
         $penyata->update(array_merge($validatedData, [
             'jumlah_hutang' => $jumlahHutang,
             'jumlah_bukan_hutang' => $jumlahBukanHutang,
-            'jumlah_keseluruhan' => $jumlahKeseluruhan
+            'jumlah_keseluruhan' => $jumlahKeseluruhan,
+            //'tarikh' => now() // Update the timestamp for the record
+
         ]));
     
         return redirect()->route('penyata-gaji.index')->with('success', 'Penyata Gaji berjaya dikemaskini');

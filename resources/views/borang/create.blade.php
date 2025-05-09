@@ -14,7 +14,7 @@
             <select id="nama" name="nama" class="form-control"required>
                 <option value="">Pilih Nama Pegawai</option>
                 @foreach ($pinjaman as $id => $nama)
-                    <option value="{{ $id }}">{{ $nama }}</option>
+                    <option value="{{ $nama }}" data-id="{{ $id }}">{{ $nama }}</option>
                 @endforeach
             </select>
 
@@ -194,7 +194,9 @@ document.querySelectorAll('input').forEach(function(input) {
 calculateTotals();
 
 document.getElementById('nama').addEventListener('change', function() {
-    var pegawaiId = this.value;
+    // var pegawaiId = this.value;
+    var selectedOption = this.options[this.selectedIndex];
+    var pegawaiId = selectedOption.getAttribute('data-id');
     
     if (pegawaiId) {
         fetch('/pegawai/' + pegawaiId)

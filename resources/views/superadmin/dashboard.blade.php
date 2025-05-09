@@ -16,7 +16,7 @@
             <form action="{{ route('dashboard') }}" method="GET">
                 <select name="negeri" class="form-control" onchange="this.form.submit()">
                     <option value="">-- Pilih Negeri --</option>
-                    @foreach(['IBU PEJABAT','JOHOR','KEDAH','KELANTAN','MELAKA','NEGERI SEMBILAN','PAHANG','PERAK','PERLIS','SELANGOR','TERENGGANU','SARAWAK','WILAYAH PERSEKUTUAN KUALA LUMPUR','WILAYAH PERSEKUTUAN LABUAN','WILAYAH PERSEKUTUAN PUTRAJAYA','FRAM WILAYAH UTARA','FRAM WILAYAH TIMUR','FRAM SABAH','FRAM SARAWAK'] as $negeri)
+                    @foreach(['IBU PEJABAT','JOHOR','KEDAH','KELANTAN','MELAKA','NEGERI SEMBILAN','PAHANG','PULAU PINANG','PERAK','PERLIS','SELANGOR','TERENGGANU','SARAWAK','WILAYAH PERSEKUTUAN KUALA LUMPUR','WILAYAH PERSEKUTUAN LABUAN','WILAYAH PERSEKUTUAN PUTRAJAYA','FRAM WILAYAH UTARA','FRAM WILAYAH TIMUR','FRAM SABAH','FRAM SARAWAK'] as $negeri)
                         <option value="{{ $negeri }}" {{ request('negeri') == $negeri ? 'selected' : '' }}>{{ $negeri }}</option>
                     @endforeach
                 </select>
@@ -33,6 +33,7 @@
         <div class="card-body">
             <a href="{{ route('penyata-gaji.index', ['negeri' => request('negeri')]) }}" class="btn btn-primary">Lihat Penyata Gaji</a>
             <a href="{{ route('pinjaman-perumahan.index', ['negeri' => request('negeri')]) }}" class="btn btn-success">Lihat Pinjaman Perumahan</a>
+            <a href="{{ route('borang.index', ['negeri' => request('negeri')]) }}" class="btn btn-success">Lihat SKAI07</a>
         </div>
     </div>
     @endif

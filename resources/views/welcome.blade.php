@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
-        <title>e-Keberhutangan Serius | Unit Integriti</title>
+        <title>e-Liabiliti</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -30,7 +30,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
-        <title>e-Keberhutangan Serius | Unit Integriti</title>
+        <title>e-Liabiliti | Unit Integriti</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -55,7 +55,7 @@
                 <h1>JABATAN BOMBA DAN PENYELAMAT MALAYSIA</h1>
                 <div class="nav-subtext">
                     <span class="blue-line"></span>
-                    <span class="system-name">SISTEM e-KEBERHUTANGAN SERIUS</span>
+                    <span class="system-name">SISTEM e-LIABILITI</span>
                     <span class="blue-line"></span>
                 </div>
             </div>
@@ -77,7 +77,7 @@
     <!-- Hero Section -->
     <header class="hero">
         <div class="hero-content">
-            <h1>Selamat Datang ke<br><span>Sistem e-Keberhutangan Kewangan Serius Unit Integriti</span></h1>
+            <h1>Selamat Datang ke<br><span>Sistem e-Liabiliti Unit Integriti</span></h1>
             <p>Jabatan Bomba dan Penyelamat Malaysia</p>
             <a href="{{ route('login') }}" class="btn primary">Log Masuk</a>
         </div>
@@ -96,7 +96,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; {{ date('Y') }} Sistem e-Keberhutangan Serius | Unit Integriti JBPM</p>
+        <p>&copy; {{ date('Y') }} Sistem e-Liabiliti | Unit Integriti JBPM</p>
     </footer>
 
 </body>

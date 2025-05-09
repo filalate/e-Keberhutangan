@@ -38,7 +38,8 @@ class PenyataGaji extends Model
         'angkasa_bukan_pinjaman',
         'jumlah_hutang',
         'jumlah_bukan_hutang',
-        'jumlah_keseluruhan'
+        'jumlah_keseluruhan',
+        'tarikh'
     ];
 
     // Define the relationship to the User model

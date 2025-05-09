@@ -5,22 +5,61 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SKAI07;
 use App\Models\PinjamanPerumahan;
+use App\Models\User; // Import model User
 
 class SKAI07Controller extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Paginate the results (10 per page as an example)
-        $skai07 = SKAI07::paginate(10);
+        // Ambil tahun dan bulan dari request, dengan default semasa
+        $year = $request->input('year', date('Y'));  // Default tahun semasa
+        $month = $request->input('month', null);  // Default bulan adalah null
 
-        // Pass paginated results to the view
-        return view('borang.index', compact('skai07'));
+        // Mulakan query untuk mendapatkan data
+        $skai07 = SKAI07::query();
+
+        // Periksa jika superadmin dan ada filter negeri
+        if (auth()->user()->isSuperAdmin() && $request->has('negeri') && $request->negeri !== '') {
+            // Superadmin memilih negeri tertentu
+            $skai07->whereHas('user', function ($query) use ($request) {
+                $query->where('negeri', $request->negeri);
+            });
+        } elseif (auth()->user()->isSuperAdmin()) {
+             // Jika superadmin tidak memilih negeri, hanya data superadmin sahaja dipaparkan
+             $skai07->where('user_id', auth()->id()); // Filter berdasarkan user_id superadmini
+        } else {
+            // Admin negeri hanya boleh lihat negeri sendiri
+            $skai07->whereHas('user', function ($query) {
+                $query->where('negeri', auth()->user()->negeri);
+            });
+        }
+
+        // Condition untuk tahun dan bulan
+        if ($month && $year) {
+            // Jika kedua-dua tahun dan bulan dipilih
+            $skai07->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month);
+        } elseif ($year) {
+            // Jika hanya tahun dipilih
+            $skai07->whereYear('created_at', $year);
+        } elseif ($month) {
+            // Jika hanya bulan dipilih, tanpa tahun
+            $skai07->whereMonth('created_at', $month);
+        }
+
+        // Ambil data dan paginate
+        $skai07 = $skai07->paginate(10);
+
+        // Return view dengan data yang difilter
+        return view('borang.index', compact('skai07', 'year', 'month'));
     }
 
     public function create()
     {
+        $user_id = auth()->id();
         // Ambil senarai pegawai yang agregat_bersih > 60%
         $pinjaman = PinjamanPerumahan::where('agregat_bersih', '>', 60)
+                                    ->where('user_id', $user_id)
                                     ->pluck('nama_pegawai', 'id'); // Hanya pegawai dengan agregat_bersih > 60%
 
                                     
@@ -48,6 +87,7 @@ class SKAI07Controller extends Controller
             ($request->pinjaman_peribadi + $request->kad_kredit + $request->lain2_tidak_bercagar) / $jumlahPendapatan * 100 : 0;
 
         // Simpan dalam database
+        // dd(auth()->id());
         SKAI07::create([
             'nama' => $request->nama,
             'no_kad_pengenalan' => $request->no_kad_pengenalan,
@@ -75,7 +115,9 @@ class SKAI07Controller extends Controller
             'jumlah_pendapatan' => $jumlahPendapatan,
             'jumlah_perbelanjaan' => $jumlahPerbelanjaan,
             'lebihan_pendapatan' => $lebihanPendapatan,
-            'percent_liabiliti_tidak_bercagar' => $percentLiabilitiTidakBercagar
+            'percent_liabiliti_tidak_bercagar' => $percentLiabilitiTidakBercagar,
+            'user_id' => auth()->id(), // Simpan user_id yang sedang log masuk
+
         ]);
 
         return redirect()->route('borang.index')->with('success', 'Data berjaya disimpan!');

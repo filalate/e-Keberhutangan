@@ -13,7 +13,30 @@
             });
         </script>
     @endif
-    
+
+    <!-- Form untuk filter tahun dan bulan -->
+    <form method="GET" action="{{ route('penyata-gaji.index') }}">
+        <div class="d-flex mb-3">
+            <!-- Dropdown Tahun -->
+            <select name="year" class="form-control" onchange="this.form.submit()">
+                <option value="" {{ is_null(request('year')) ? 'selected' : '' }}>-- Pilih Tahun --</option>
+                @foreach(range(2023, date('Y')) as $yearOption)
+                    <option value="{{ $yearOption }}" {{ request('year') == $yearOption ? 'selected' : '' }}>{{ $yearOption }}</option>
+                @endforeach
+            </select>
+
+            <!-- Dropdown Bulan -->
+            <select name="month" class="form-control ml-2" onchange="this.form.submit()">
+                <option value="" {{ is_null(request('month')) ? 'selected' : '' }}>-- Pilih Bulan --</option>
+                @foreach(range(1, 12) as $monthOption)
+                    <option value="{{ $monthOption }}" {{ request('month') == $monthOption ? 'selected' : '' }}>
+                        {{ \Carbon\Carbon::create()->month($monthOption)->locale('ms')->isoFormat('MMMM') }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </form>
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="search-container">
             <input type="text" id="search" placeholder="Cari Nama Pegawai..." onkeyup="searchFunction()" />
@@ -42,7 +65,7 @@
                         <td>RM{{ number_format($p->jumlah_hutang, 2) }}</td>
                         <td>RM{{ number_format($p->jumlah_bukan_hutang, 2) }}</td>
                         <td>RM{{ number_format($p->jumlah_keseluruhan, 2) }}</td>
-                        
+
                         <td class="icon-actions">
                             <a href="{{ route('penyata-gaji.show', $p->id) }}" class="icon-hover">
                                 <i class="fa fa-eye"></i>
@@ -51,7 +74,7 @@
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <form action="{{ route('penyata-gaji.destroy', $p->id) }}" method="POST" class="delete-form icon-hover" id="deleteForm{{ $p->id }}">
-                                @csrf 
+                                @csrf
                                 @method('DELETE')
                                 <button type="button" class="icon-hover" onclick="confirmDelete({{ $p->id }})">
                                     <i class="fa fa-trash"></i>
@@ -105,6 +128,38 @@
             }
         });
     }
+
+    // Resetting the selections for year and month dropdowns on page load if no parameter is set
+    window.addEventListener('DOMContentLoaded', function() {
+    // Ambil parameter 'year' dan 'month' dari URL
+    const year = new URLSearchParams(window.location.search).get('year');
+    const month = new URLSearchParams(window.location.search).get('month');
+
+    // Jika tahun atau bulan ada dalam URL, kita kosongkan parameter tersebut
+    if (year || month) {
+        // Ubah URL tanpa parameter 'year' dan 'month'
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.delete('year');
+        currentUrl.searchParams.delete('month');
+        
+        // Redirect ke URL tanpa parameter
+        window.history.replaceState(null, '', currentUrl);
+        
+        // Reset dropdown
+        const yearSelect = document.getElementById("yearSelect");
+        const monthSelect = document.getElementById("monthSelect");
+
+        if (yearSelect) {
+            yearSelect.selectedIndex = 0; // Reset year dropdown
+        }
+
+        if (monthSelect) {
+            monthSelect.selectedIndex = 0; // Reset month dropdown
+        }
+    }
+});
+
+
 </script>
 
 @endsection

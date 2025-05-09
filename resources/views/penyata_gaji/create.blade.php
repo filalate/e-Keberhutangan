@@ -27,12 +27,12 @@
             <input type="number" id="pinjaman_perumahan" name="pinjaman_perumahan" class="form-control" step="0.001">
         </div>
         <div class="form-grid">
-            <label for="bayaran_itp">Bayaran Balik ITP:</label>
-            <input type="number" id="bayaran_itp" name="bayaran_itp" class="form-control" step="0.001">
+            <label for="bayaran_balik_itp">Bayaran Balik ITP:</label>
+            <input type="number" id="bayaran_balik_itp" name="bayaran_balik_itp" class="form-control" step="0.001">
         </div>
         <div class="form-grid">
-            <label for="bayaran_bsh">Bayaran Balik BSH:</label>
-            <input type="number" id="bayaran_bsh" name="bayaran_bsh" class="form-control" step="0.001">
+            <label for="bayaran_balik_bsh">Bayaran Balik BSH:</label>
+            <input type="number" id="bayaran_balik_bsh" name="bayaran_balik_bsh" class="form-control" step="0.001">
         </div>
         <div class="form-grid">
             <label for="ptptn">PTPTN:</label>
@@ -56,7 +56,7 @@
         </div>
         <div class="form-grid">
             <label for="lain_lain_potongan">Lain-lain Potongan (Pembentungan):</label>
-            <input type="number" id="lain_lain_potongan" name="lain_lain_potongan" class="form-control" step="0.001">
+            <input type="number" id="lain_lain_potongan_pembentungan" name="lain_lain_potongan_pembentungan" class="form-control" step="0.001">
         </div>
         <div class="form-grid">
             <label for="koperasi">Koperasi:</label>
@@ -136,8 +136,12 @@
 
             let totalHutang = 0;
             hutangFields.forEach(function(id) {
-                totalHutang += parseFloat(document.getElementById(id).value) || 0;
+                let el = document.getElementById(id);
+                if (el) {
+                    totalHutang += parseFloat(el.value) || 0;
+                }
             });
+            // console.log(totalHutang)
             document.getElementById('jumlah_hutang').value = totalHutang.toFixed(2);
 
             // Calculate total bukan hutang (non-liabilities)
@@ -148,7 +152,10 @@
 
             let totalBukanHutang = 0;
             bukanHutangFields.forEach(function(id) {
-                totalBukanHutang += parseFloat(document.getElementById(id).value) || 0;
+                let el = document.getElementById(id);
+                if (el) {
+                    totalBukanHutang += parseFloat(el.value) || 0;
+                } 
             });
             document.getElementById('jumlah_bukan_hutang').value = totalBukanHutang.toFixed(2);
 
@@ -161,11 +168,6 @@
         document.querySelectorAll('#penyataGajiForm input[type="number"]').forEach(function(input) {
             input.addEventListener('input', calculateTotal);
         });
-
-        // Call calculateTotal when the form is submitted to ensure values are updated
-        document.getElementById("penyataGajiForm").onsubmit = function() {
-            calculateTotal();
-        };
     </script>
 </div>
 @endsection
