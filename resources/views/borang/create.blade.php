@@ -18,6 +18,8 @@
                 @endforeach
             </select>
 
+            <input type="hidden" id="jantina" name="jantina" value="" readonly>
+
             <label for="no_kad_pengenalan">No Kad Pengenalan:</label>
             <input type="text" id="no_kad_pengenalan" name="no_kad_pengenalan" required readonly>
 
@@ -194,7 +196,6 @@ document.querySelectorAll('input').forEach(function(input) {
 calculateTotals();
 
 document.getElementById('nama').addEventListener('change', function() {
-    // var pegawaiId = this.value;
     var selectedOption = this.options[this.selectedIndex];
     var pegawaiId = selectedOption.getAttribute('data-id');
     
@@ -207,24 +208,33 @@ document.getElementById('nama').addEventListener('change', function() {
                 return response.json();
             })
             .then(data => {
-                console.log(data); // Untuk debug
+                console.log(data); // For debugging
+                
+                // Populate the hidden gender field (read-only)
+                document.getElementById('jantina').value = data.jantina || ''; // Automatically populated from Penyata Gaji
+
+                // Populate other fields
                 document.getElementById('no_kad_pengenalan').value = data.no_ic || '';
                 document.getElementById('jawatan').value = data.jawatan || '';
                 document.getElementById('gred').value = data.gred || '';
             })
             .catch(error => {
                 console.error('Error:', error);
-                // Kosongkan field jika ada error
+                // Clear fields if there is an error
                 document.getElementById('no_kad_pengenalan').value = '';
                 document.getElementById('jawatan').value = '';
                 document.getElementById('gred').value = '';
+                document.getElementById('jantina').value = ''; // Clear hidden field
             });
     } else {
+        // Clear all fields if no option is selected
         document.getElementById('no_kad_pengenalan').value = '';
         document.getElementById('jawatan').value = '';
         document.getElementById('gred').value = '';
+        document.getElementById('jantina').value = ''; // Clear hidden field
     }
 });
+
 
 </script>
 

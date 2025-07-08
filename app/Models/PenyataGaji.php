@@ -16,6 +16,8 @@ class PenyataGaji extends Model
     protected $fillable = [
         'user_id', // Ensure user_id is included for relationships
         'nama_pegawai',
+        'jantina',
+        'gred',
         'pinjaman_peribadi_bsn',
         'pinjaman_perumahan', 
         'bayaran_balik_itp', 
@@ -38,8 +40,7 @@ class PenyataGaji extends Model
         'angkasa_bukan_pinjaman',
         'jumlah_hutang',
         'jumlah_bukan_hutang',
-        'jumlah_keseluruhan',
-        'tarikh'
+        'jumlah_keseluruhan'
     ];
 
     // Define the relationship to the User model

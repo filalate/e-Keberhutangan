@@ -115,7 +115,7 @@
             <input type="text" id="percent_liabiliti_tidak_bercagar" readonly value="{{ old('percent_liabiliti_tidak_bercagar', 
             number_format(
                 ($skai07->gaji + $skai07->elaun + $skai07->sewa_rumah + $skai07->sewa_kenderaan + $skai07->sumbangan_suami_isteri + $skai07->lain_lain_pendapatan) != 0 ? 
-                (($skai07->pinjaman_peribadi + $skai07->kad_kredit + $skai07->lain2_tidak_bercagar) / ($skai07->gaji + $skai07->elaun + $skai07->sewa_rumah + $skai07->sewa_kenderaan + $skai07->sumbangan_suami_isteri + $skai07->lain_lain_pendapatan)) * 100 : 0, 2)) }}%
+                (($skai07->pinjaman_peribadi + $skai07->kad_kredit + $skai07->lain2_tidak_bercagar) / ($skai07->gaji + $skai07->elaun + $skai07->sewa_rumah + $skai07->sewa_kenderaan + $skai07->sumbangan_suami_isteri + $skai07->lain_lain_pendapatan)) * 100 : 0, 2)) }}%">
 
         </div>
 

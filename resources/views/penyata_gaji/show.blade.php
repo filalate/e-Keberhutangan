@@ -2,18 +2,26 @@
 
 @section('content')
 <div class="container">
-    <h2 class="form-title">Butiran Penyata Gaji</h2>
+    <h2 class="form-title">
+        <i class="fas fa-file-invoice-dollar"></i> Butiran Penyata Gaji
+    </h2>
 
     <!-- Maklumat Pegawai -->
-    <h4 class="section-title">Maklumat Pegawai</h4>
+    <h4 class="section-title">
+        <i class="fas fa-user-tie"></i> Maklumat Pegawai
+    </h4>
     <div class="info-box">
         <p><strong>Nama Pegawai:</strong> {{ $penyataGaji->nama_pegawai }}</p>
+        <p><strong>Jantina:</strong> {{ $penyataGaji->jantina }}</p>
+        <p><strong>Gred:</strong> {{ $penyataGaji->gred }}</p>
     </div>
 
     <hr>
 
     <!-- Hutang -->
-    <h4 class="section-title">Hutang</h4>
+    <h4 class="section-title">
+        <i class="fas fa-money-bill-wave"></i> Hutang
+    </h4>
     <div class="info-box">
         <p><strong>Pinjaman Peribadi + BSN:</strong> RM{{ number_format($penyataGaji->pinjaman_peribadi_bsn, 2) }}</p>
         <p><strong>Pinjaman Perumahan:</strong> RM{{ number_format($penyataGaji->pinjaman_perumahan, 2) }}</p>
@@ -33,7 +41,9 @@
     <hr>
 
     <!-- Bukan Hutang -->
-    <h4 class="section-title">Bukan Hutang</h4>
+    <h4 class="section-title">
+        <i class="fas fa-hand-holding-usd"></i> Bukan Hutang
+    </h4>
     <div class="info-box">
         <p><strong>Potongan Lembaga TH:</strong> RM{{ number_format($penyataGaji->potongan_lembaga_th, 2) }}</p>
         <p><strong>Amanah Saham Nasional:</strong> RM{{ number_format($penyataGaji->amanah_saham_nasional, 2) }}</p>
@@ -45,7 +55,9 @@
     </div>
 
     <!-- Ringkasan Kewangan -->
-    <h4 class="section-title">Ringkasan Kewangan</h4>
+    <h4 class="section-title">
+        <i class="fas fa-calculator"></i> Ringkasan Kewangan
+    </h4>
     <div class="info-box">
         <p><strong>Jumlah Hutang:</strong> RM{{ number_format($penyataGaji->jumlah_hutang, 2) }}</p>
         <p><strong>Jumlah Bukan Hutang:</strong> RM{{ number_format($penyataGaji->jumlah_bukan_hutang, 2) }}</p>
@@ -53,8 +65,9 @@
     </div>
 
     <div class="button-container">
-        <a href="{{ route('penyata-gaji.index') }}" class="btn btn-secondary mt-3">Kembali</a>
+        <a href="{{ route('penyata-gaji.index') }}" class="btn btn-secondary mt-3">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
     </div>
-
 </div>
 @endsection

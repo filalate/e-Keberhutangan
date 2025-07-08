@@ -3,12 +3,16 @@
 @section('content')
 <div class="container">
     <!-- Centered Title -->
-    <h2 class="form-title">Borang Penyata Gaji</h2>
+    <h2 class="form-title">
+        <i class="fas fa-file-invoice-dollar"></i> Borang Penyata Gaji
+    </h2>
 
     <form action="{{ route('penyata-gaji.store') }}" method="POST" id="penyataGajiForm">
         @csrf
 
-        <h4 class="section-title">Maklumat Pegawai</h4>
+        <h4 class="section-title">
+            <i class="fas fa-user-tie"></i> Maklumat Pegawai
+        </h4>
         <div class="form-grid">
             <label for="nama_pegawai">Nama Pegawai:</label>
             <input type="text" id="nama_pegawai" name="nama_pegawai" class="form-control" required>
@@ -16,8 +20,45 @@
 
         <hr>
 
+        <!-- Jantina (Gender) -->
+        <div class="form-grid">
+            <label for="jantina">Jantina:</label>
+            <select id="jantina" name="jantina" class="form-control" required>
+                <option value="">Pilih Jantina</option>
+                <option value="Lelaki">Lelaki</option>
+                <option value="Perempuan">Perempuan</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- Gred: Huruf dan Nombor Gred Sebelah-Sebelah -->
+        <div class="form-grid">
+            <label for="gred" style="flex: 1;">Gred:</label>
+            <div style="display: flex; gap: 10px;">
+                <!-- Huruf Gred -->
+                <div style="flex: 1;">
+                    <input type="text" id="gred_huruf" name="gred_huruf" class="form-control" placeholder="KB, N, S" required>
+                </div>
+
+                <!-- Nombor Gred -->
+                <div style="flex: 1;">
+                    <select id="gred_nombor" name="gred_nombor" class="form-control" required>
+                        <option value="">Pilih Nombor Gred</option>
+                        @for($i = 1; $i <= 15; $i++)
+                            <option value="{{ $i }}">{{ $i }}</option>
+                        @endfor
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
         <!-- Hutang (Liabilities) -->
-        <h4 class="section-title">Hutang</h4>
+        <h4 class="section-title">
+            <i class="fas fa-money-bill-wave"></i> Hutang
+        </h4>
         <div class="form-grid">
             <label for="pinjaman_peribadi_bsn">Pinjaman Peribadi + BSN:</label>
             <input type="number" id="pinjaman_peribadi_bsn" name="pinjaman_peribadi_bsn" class="form-control" step="0.001">
@@ -55,7 +96,7 @@
             <input type="number" id="pcb" name="pcb" class="form-control" step="0.001">
         </div>
         <div class="form-grid">
-            <label for="lain_lain_potongan">Lain-lain Potongan (Pembentungan):</label>
+            <label for="lain_lain_potongan_pembentungan">Lain-lain Potongan (Pembentungan):</label>
             <input type="number" id="lain_lain_potongan_pembentungan" name="lain_lain_potongan_pembentungan" class="form-control" step="0.001">
         </div>
         <div class="form-grid">
@@ -74,7 +115,9 @@
         <hr>
 
         <!-- Bukan Hutang (Non-Liabilities) -->
-        <h4 class="section-title">Bukan Hutang</h4>
+        <h4 class="section-title">
+            <i class="fas fa-hand-holding-usd"></i> Bukan Hutang
+        </h4>
         <div class="form-grid">
             <label for="potongan_lembaga_th">Potongan Lembaga TH:</label>
             <input type="number" id="potongan_lembaga_th" name="potongan_lembaga_th" class="form-control" step="0.001">
@@ -105,7 +148,9 @@
         </div>
         
         <!-- Financial Summary -->
-        <h4 class="section-title">Ringkasan Kewangan</h4>
+        <h4 class="section-title">
+            <i class="fas fa-calculator"></i> Ringkasan Kewangan
+        </h4>
         <div class="form-grid">
             <label>Jumlah Hutang:</label>
             <input type="number" id="jumlah_hutang" name="jumlah_hutang" class="form-control" readonly>
@@ -120,8 +165,12 @@
         </div>
 
         <div class="button-container">
-            <a href="{{ route('penyata-gaji.index') }}" class="btn btn-secondary btn-base mt-3">Kembali</a>
-            <button type="submit" class="btn btn-hantar btn-base mt-3">Simpan</button>
+            <a href="{{ route('penyata-gaji.index') }}" class="btn btn-secondary btn-base mt-3">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+            <button type="submit" class="btn btn-hantar btn-base mt-3">
+                <i class="fas fa-save"></i> Simpan
+            </button>
         </div>
     </form>
 
@@ -129,9 +178,9 @@
         function calculateTotal() {
             // Calculate total hutang (liabilities)
             let hutangFields = [
-                'pinjaman_peribadi_bsn', 'pinjaman_perumahan', 'bayaran_itp',
-                'bayaran_bsh', 'ptptn', 'kutipan_semula_emolumen', 'arahan_potongan_nafkah',
-                'komputer', 'pcb', 'lain_lain_potongan', 'koperasi', 'berkat', 'angkasa_hutang'
+                'pinjaman_peribadi_bsn', 'pinjaman_perumahan', 'bayaran_balik_itp',
+                'bayaran_balik_bsh', 'ptptn', 'kutipan_semula_emolumen', 'arahan_potongan_nafkah',
+                'komputer', 'pcb', 'lain_lain_potongan', 'koperasi', 'berkat', 'angkasa'
             ];
 
             let totalHutang = 0;
@@ -141,12 +190,11 @@
                     totalHutang += parseFloat(el.value) || 0;
                 }
             });
-            // console.log(totalHutang)
             document.getElementById('jumlah_hutang').value = totalHutang.toFixed(2);
 
             // Calculate total bukan hutang (non-liabilities)
             let bukanHutangFields = [
-                'potongan_lembaga_th', 'amanah_saham_nasional', 'zakat_yapiem', 'insuran', 
+                'potongan_lembaga_th', 'amanah_saham_nasional', 'zakat_yayasan_wakaf', 'insuran', 
                 'kwsp', 'i_destinasi', 'angkasa_bukan_pinjaman'
             ];
 

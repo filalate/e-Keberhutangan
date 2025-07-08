@@ -16,6 +16,7 @@ class SKAI07 extends Model
         'no_kad_pengenalan',
         'no_badan',
         'gred',
+        'jantina',
         'jawatan',
         'gaji',
         'elaun',

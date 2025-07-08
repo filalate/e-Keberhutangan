@@ -24,11 +24,14 @@
             <select id="nama_pegawai" name="nama_pegawai" class="form-control" required onchange="fetchPenyataGaji()">
                 <option value="">Pilih Nama Pegawai</option>
                 @foreach($namaPegawaiList as $pegawai)
-                    <option value="{{ $pegawai->nama_pegawai }}" data-id="{{ $pegawai->id }}">{{ $pegawai->nama_pegawai }}</option>
+                <option value="{{ $pegawai->nama_pegawai }}" 
+                        data-id="{{ $pegawai->id }}"
+                        data-gred="{{ $pegawai->gred }}">
+                    {{ $pegawai->nama_pegawai }}
+                </option>
                 @endforeach
             </select>
 
-            <!-- Maklumat lain di sini -->
             <label for="no_ic">No Kad Pengenalan:</label>
             <input type="text" id="no_ic" name="no_ic" required>
 
@@ -36,7 +39,7 @@
             <input type="text" id="jawatan" name="jawatan" required>
 
             <label for="gred">Gred:</label>
-            <input type="text" id="gred" name="gred" required>
+            <input type="text" id="gred" name="gred" required readonly>
 
             <label for="tempat_bertugas">Tempat Bertugas:</label>
             <input type="text" id="tempat_bertugas" name="tempat_bertugas" required>
@@ -80,30 +83,47 @@
 
 <script>
     function fetchPenyataGaji() {
-
     const selectNP = document.getElementById('nama_pegawai');
     const selectedOptionNP = selectNP.options[selectNP.selectedIndex];
     const idPegawai = selectedOptionNP.getAttribute('data-id');
+    const gred = selectedOptionNP.getAttribute('data-gred');
 
-    if (idPegawai) {
-        fetch(`/penyata-gaji/api/search?id_pegawai=${idPegawai}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data) {
-                    document.getElementById('jumlah_potongan').value = parseFloat(data.jumlah_keseluruhan || 0).toFixed(2);
-                    document.getElementById('jumlah_pinjaman_perumahan').value = parseFloat(data.pinjaman_perumahan || 0).toFixed(2);
+    console.log("Selected gred:", gred); // Debugging line
+    
+    // Set the gred value immediately
+    if (gred) {
+        document.getElementById('gred').value = gred;
+        } else {
+            document.getElementById('gred').value = '';
+        }
 
-                    // Call calculateAgregat() for further calculations
-                    calculateAgregat();
-                } else {
-                    alert('Data Penyata Gaji tidak ditemukan.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    } else {
-        alert('Sila pilih nama pegawai.');
+        if (idPegawai) {
+            fetch(`/penyata-gaji/api/search?id_pegawai=${idPegawai}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data) {
+                        console.log("Data received:", data); // Debugging line
+                        document.getElementById('jumlah_potongan').value = parseFloat(data.jumlah_keseluruhan || 0).toFixed(2);
+                        document.getElementById('jumlah_pinjaman_perumahan').value = parseFloat(data.pinjaman_perumahan || 0).toFixed(2);
+                        calculateAgregat();
+                    } else {
+                        console.error('No data received');
+                        alert('Data Penyata Gaji tidak ditemukan.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    alert('Error fetching data: ' + error.message);
+                });
+        } else {
+            alert('Sila pilih nama pegawai.');
+        }
     }
-}
 
     function calculateAgregat() {
         console.log("calculateAgregat dipanggil"); // Debugging

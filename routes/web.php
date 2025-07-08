@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SKAI07;
 use App\Models\PinjamanPerumahan;
-
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GrafController;
 
 // Halaman utama
 Route::get('/', function () {
@@ -106,7 +107,11 @@ Route::resource('pinjaman-perumahan', PinjamanPerumahanController::class);
 Route::get('/pegawai/{id}', [Skai07Controller::class, 'getPegawaiInfo']);
 
 Route::get('/pegawai/{id}', function ($id) {
-    $pegawai = PinjamanPerumahan::find($id);
+    // $pegawai = PinjamanPerumahan::find($id);
+    $pegawai = PinjamanPerumahan::selectRaw('pinjaman_perumahan.*, penyata_gaji.jantina')
+    ->leftJoin('penyata_gaji', 'pinjaman_perumahan.penyata_gaji_id', '=', 'penyata_gaji.id')
+    ->where('pinjaman_perumahan.id', $id)
+    ->first();
     return response()->json($pegawai);
 });
 
@@ -117,8 +122,19 @@ Route::middleware(['auth', 'role:superadmin,admin_negeri'])->group(function () {
     Route::get('/penyata-gaji/api/search', [PenyataGajiController::class, 'search'])->name('penyata-gaji.search');
 });
 
+Route::get('/penyata-gaji/search', [PenyataGajiController::class, 'searchApi']);
+
+
 // Route for SuperAdmin to view and manage Negeri
 Route::get('/negeri/{negeri}', [SuperAdminController::class, 'paparNegeri'])->name('negeri.show');
+
+Route::get('/dashboard/penyata-gaji-stats-by-negeri', [DashboardController::class, 'getPenyataGajiStatsByNegeri'])->name('dashboard.penyata_gaji_stats_by_negeri');
+
+Route::prefix('graf')->middleware('auth')->group(function () {
+    Route::get('keterhutangan', [GrafController::class, 'statistikKeterhutangan'])->name('graf.keterhutangan');
+    Route::get('kumpulan-perkhidmatan', [GrafController::class, 'kumpulanPerkhidmatan'])->name('graf.kumpulan-perkhidmatan');
+    Route::get('senarai-skai07', [GrafController::class, 'senaraiSkai07'])->name('graf.senarai-skai07');
+});
 
 // Direct Route for Penyata Gaji and Pinjaman Perumahan Index
 // Route::get('/penyata-gaji', [PenyataGajiController::class, 'index'])->name('penyata-gaji.index');

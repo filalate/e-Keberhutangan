@@ -10,6 +10,7 @@
         <h4 class="section-title">Maklumat Pegawai</h4>
         <div class="form-grid">
             <label for="nama_pegawai">Nama Pegawai:</label>
+            {{--
             <select id="nama_pegawai" name="nama_pegawai" class="form-control" required onchange="fetchPenyataGaji()">
                 <option value="">Pilih Nama Pegawai</option>
                 @foreach($namaPegawaiList as $nama)
@@ -18,6 +19,8 @@
                     </option>
                 @endforeach
             </select>
+            --}}
+            {{ $pinjaman->nama_pegawai }}
 
             <label for="no_ic">No Kad Pengenalan:</label>
             <input type="text" id="no_ic" name="no_ic" value="{{ $pinjaman->no_ic }}" required>

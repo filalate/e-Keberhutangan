@@ -45,6 +45,35 @@
                     </x-dropdown>
                     @endif
 
+                    <!-- Graf Dropdown (Visible only to superadmin) -->
+                    @if(auth()->check() && auth()->user()->role == 'superadmin')
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 dropdown-button">
+                                <div>Analisis & Statistik</div>
+                                <div class="ms-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('graf.keterhutangan')" class="nav-link-grey">
+                                {{ __('Statistik Keterhutangan Kewangan') }}
+                            </x-dropdown-link>
+
+                            <x-dropdown-link :href="route('graf.kumpulan-perkhidmatan')" class="nav-link-grey">
+                                {{ __('Statistik Kumpulan Perkhidmatan') }}
+                            </x-dropdown-link>
+
+                            <x-dropdown-link :href="route('graf.senarai-skai07')" class="nav-link-grey">
+                                {{ __('Statistik SKAI 07') }}
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
+                    @endif
                 </div>
             </div>
 
@@ -99,7 +128,7 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
-            @if(auth()->user()->role == 'superadmin' || auth()->user()->role == 'admin_negeri')
+            @if(auth()->user()->role == 'superadmin')
                 <x-responsive-nav-link :href="route('penyata-gaji.index')" class="nav-link-grey">
                     {{ __('Penyata Gaji') }}
                 </x-responsive-nav-link>
@@ -110,6 +139,18 @@
 
                 <x-responsive-nav-link :href="route('borang.index')" class="nav-link-grey">
                     {{ __('Borang SKAI 07') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('graf.keterhutangan')" class="nav-link-grey">
+                    {{ __('Statistik Keterhutangan Kewangan') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('graf.kumpulan-perkhidmatan')" class="nav-link-grey">
+                    {{ __('Statistik Kumpulan Perkhidmatan') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('graf.senarai-skai07')" class="nav-link-grey">
+                    {{ __('Statistik SKAI 07') }}
                 </x-responsive-nav-link>
             @endif
         </div>
@@ -141,11 +182,11 @@
 </nav>
 
 <script>
-        document.querySelectorAll('.dropdown-button').forEach(button => {
+    document.querySelectorAll('.dropdown-button').forEach(button => {
         button.addEventListener('click', function() {
-            // Buang kelas active dari semua butang
+            // Remove active class from all buttons
             document.querySelectorAll('.dropdown-button').forEach(btn => btn.classList.remove('active'));
-            // Tambah kelas active pada butang yang diklik
+            // Add active class to clicked button
             this.classList.add('active');
         });
     });
